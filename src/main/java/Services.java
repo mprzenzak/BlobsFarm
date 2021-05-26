@@ -1,32 +1,56 @@
 import Classes.Map.Map;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Services {
-    public static void main(String[] args) {
+    private static int simulationLength;
+    private static int initialBlobsAmount;
+    private static int initialFoodAmount;
+
+    public static void main(String[] args) throws IOException {
         System.out.println("Witaj w symulacji agentowej przedstawiającej kolonię blobków \nPodaj parametry wejściowe:");
         System.out.println("Początkowa ilość blobków:");
         Scanner initialParametersScanner = new Scanner(System.in);
         Scanner blobsProportionScanner = new Scanner(System.in);
         Scanner mapDimensionsScanner = new Scanner(System.in);
-        int initialBlobsAmount = initialParametersScanner.nextInt();
+        //initialBlobsAmount = initialParametersScanner.nextInt();
+        initialBlobsAmount = Integer.parseInt(args[0]);
         System.out.println("Ilość jedzenia:");
-        int initialFoodAmount = initialParametersScanner.nextInt();
+        //initialFoodAmount = initialParametersScanner.nextInt();
+        initialFoodAmount = Integer.parseInt(args[1]);
         System.out.println("Czas trwania symulacji (dni):");
-        int simulationLength = initialParametersScanner.nextInt();
+        //simulationLength = initialParametersScanner.nextInt();
+        simulationLength = Integer.parseInt(args[2]);
         System.out.println("Stosunek liczby agresorów do altruistów, np. 60/40:");
-        String blobsProportionRatio = blobsProportionScanner.nextLine();
+        //String blobsProportionRatio = blobsProportionScanner.nextLine();
+        String blobsProportionRatio = args[3];
         String[] blobsProportion = blobsProportionRatio.split("/");
         //killerow zawsze 5%
         int killersNumber = initialBlobsAmount / 20;
         int altruistsNumber = (initialBlobsAmount - killersNumber) * Integer.parseInt(blobsProportion[0]) / Integer.parseInt(blobsProportion[1]);
         int agressorsNumber = initialBlobsAmount - altruistsNumber - killersNumber;
         System.out.println("Podaj wymiary mapy, np. 10x10");
-        String mapSize = mapDimensionsScanner.nextLine();
+        //String mapSize = mapDimensionsScanner.nextLine();
+        String mapSize = args[4];
         String[] mapDimensions = mapSize.split("x");
         int mapX = Integer.parseInt(mapDimensions[0]);
         int mapY = Integer.parseInt(mapDimensions[1]);
         Map map = new Map(mapX, mapY, initialFoodAmount);
+
+        dayIteration();
+    }
+
+    public static void dayIteration() throws IOException {
+        for (int i = 1; i <= simulationLength; i++) {
+            System.out.println("Day " + i);
+            FileWriter csvWriter = new FileWriter("population.csv", true);
+            csvWriter.write("Day " + i + " " + initialBlobsAmount + "\n");
+            csvWriter.flush();
+            csvWriter.close();
+        }
     }
 }
 
