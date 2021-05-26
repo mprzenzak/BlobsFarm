@@ -5,6 +5,10 @@ import Interfaces.Live;
 public class FoodField extends AMapField {
     private static int foodStorage = 2;
 
+    public FoodField(int foodStorage){
+        this.foodStorage = foodStorage;
+    }
+
     public void removeFood() {
 
     }
