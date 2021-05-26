@@ -1,0 +1,5 @@
+package Classes.Map;
+
+public enum Bonuses {
+    EXTENDED_LIFE_LENGTH, GIVE10CHILDREN, MAKE_IMMORTAL, CHANGE_CHARACTERICTIC
+}
