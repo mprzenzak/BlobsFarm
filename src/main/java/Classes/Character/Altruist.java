@@ -7,6 +7,10 @@ import Interfaces.Live;
 public class Altruist extends ABlob {
     private static int _AltruistIndcies = 0;
 
+    public Altruist(int x, int y, boolean alive, String characteristic) {
+        super(x, y, alive, characteristic);
+    }
+
     @Override
     public void reproduce() {
 
