@@ -6,6 +6,11 @@ import Interfaces.Live;
 
 public class Agressor extends ABlob {
     private static int _AgressorIndcies = 0;
+    //public int[][] position;
+
+    public Agressor(int x, int y, boolean alive, String characteristic) {
+        super(x, y, alive, characteristic);
+    }
 
     @Override
     public void reproduce() {
