@@ -4,8 +4,10 @@ import Classes.Map.AMapField;
 import Classes.Map.FieldContent;
 import Interfaces.Live;
 
+import java.util.ArrayList;
+
 public class Agressor extends ABlob {
-    private static int _AgressorIndcies = 0;
+    public static final ArrayList<Integer> AgressorIndcies = new ArrayList<>();
     //public int[][] position;
 
     public Agressor(int x, int y, boolean alive, String characteristic) {
@@ -40,5 +42,8 @@ public class Agressor extends ABlob {
     @Override
     public void interactWithAMapField(AMapField aMapField) {
 
+    }
+    public static ArrayList<Integer> getAgressorIndicies() {
+        return AgressorIndcies;
     }
 }

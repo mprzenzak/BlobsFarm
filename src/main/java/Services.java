@@ -1,6 +1,5 @@
-import Classes.Map.Map;
+import Classes.Map.WorldMap;
 
-import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
@@ -41,7 +40,7 @@ public class Services {
         String[] mapDimensions = mapSize.split("x");
         int mapX = Integer.parseInt(mapDimensions[0]);
         int mapY = Integer.parseInt(mapDimensions[1]);
-        Map map = new Map(mapX - 1, mapY - 1, initialFoodAmount);
+        WorldMap map = new WorldMap(mapX - 1, mapY - 1, initialFoodAmount, initialAltruistsNumber, initialAgressorsNumber, initialKillersNumber);
 
         dayIteration();
     }
@@ -49,6 +48,10 @@ public class Services {
     public static void dayIteration() throws IOException {
         for (int i = 1; i <= simulationLength; i++) {
             //System.out.println("Day " + i);
+
+
+
+
             FileWriter csvWriter = new FileWriter("population.csv", true);
             csvWriter.write("Day " + i + " " + initialBlobsAmount + "\n");
             csvWriter.flush();

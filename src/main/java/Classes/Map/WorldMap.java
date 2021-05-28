@@ -8,7 +8,7 @@ import Interfaces.Live;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Map {
+public class WorldMap {
     public static AMapField[][] fields;
     public static List<Live> objectsOnMap = new ArrayList<Live>();
     private int x;
@@ -16,7 +16,7 @@ public class Map {
     private static List<List<Integer>> usedCoords;
     private static int usedCoordsIndex = 0;
 
-    public Map(int x, int y, int initialFoodAmount) {
+    public WorldMap(int x, int y, int initialFoodAmount, int initialAltruistsNumber, int initialAgressorsNumber, int initialKillersNumber) {
         this.x = x;
         this.y = y;
         fields = new AMapField[x][y];
@@ -24,7 +24,7 @@ public class Map {
         generateFoodFields(initialFoodAmount, x, y);
         generateBonusFields(x, y);
         generateTrapFields(x, y);
-        generateCharacters(x, y);
+        generateCharacters(x, y, initialAltruistsNumber, initialAgressorsNumber, initialKillersNumber);
     }
 
     public static void generateFoodFields(int amount, int x, int y) {
@@ -129,20 +129,36 @@ public class Map {
         }
     }
 
-    public static void generateCharacters(int x, int y) {
+    public static void generateCharacters(int x, int y, int initialAltruistsNumber, int initialAgressorsNumber, int initialKillersNumber) {
         //generate altruists
-        int altruistPositionX = (int) (Math.random() * x);
-        int altruistPositionY = (int) (Math.random() * y);
-        objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY,true,"Altruist"));
+        for (int i = 0; i < initialAltruistsNumber; i++) {
+            int altruistPositionX = (int) (Math.random() * x);
+            int altruistPositionY = (int) (Math.random() * y);
+            int index = objectsOnMap.size();
+            ArrayList altruistIndicies = Altruist.getAltruistIndicies();
+            objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, "Altruist"));
+            altruistIndicies.add(index);
+        }
 
-        //generate agressors
-        int agressorsPositionX = (int) (Math.random() * x);
-        int agressorsPositionY = (int) (Math.random() * y);
-        objectsOnMap.add(new Agressor(agressorsPositionX, agressorsPositionY,true,"Agressor"));
+        for (int i = 0; i < initialAgressorsNumber; i++) {
+            //generate agressors
+            int agressorsPositionX = (int) (Math.random() * x);
+            int agressorsPositionY = (int) (Math.random() * y);
+            int index = objectsOnMap.size();
+            ArrayList agressorIndicies = Agressor.getAgressorIndicies();
+            objectsOnMap.add(new Agressor(agressorsPositionX, agressorsPositionY, true, "Agressor"));
+            agressorIndicies.add(index);
+        }
 
-        //generate killers
-        int killersPositionX = (int) (Math.random() * x);
-        int killersPositionY = (int) (Math.random() * y);
-        objectsOnMap.add(new Killer(killersPositionX, killersPositionY,true,"Killer"));
+        for (int i = 0; i < initialKillersNumber; i++) {
+            //generate killers
+            int killersPositionX = (int) (Math.random() * x);
+            int killersPositionY = (int) (Math.random() * y);
+            objectsOnMap.add(new Killer(killersPositionX, killersPositionY, true, "Killer"));
+        }
+    }
+
+    public static List<Live> getObjectsOnMap() {
+        return objectsOnMap;
     }
 }

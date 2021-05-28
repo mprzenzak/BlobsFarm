@@ -4,8 +4,11 @@ import Classes.Map.AMapField;
 import Classes.Map.FieldContent;
 import Interfaces.Live;
 
+import java.util.ArrayList;
+
 public class Altruist extends ABlob {
-    private static int _AltruistIndcies = 0;
+    //indicies of Altruists from objectsOnMap
+    public static final ArrayList<Integer> AltruistIndcies = new ArrayList<>();
 
     public Altruist(int x, int y, boolean alive, String characteristic) {
         super(x, y, alive, characteristic);
@@ -39,5 +42,9 @@ public class Altruist extends ABlob {
     @Override
     public void interactWithAMapField(AMapField aMapField) {
 
+    }
+
+    public static ArrayList<Integer> getAltruistIndicies() {
+        return AltruistIndcies;
     }
 }
