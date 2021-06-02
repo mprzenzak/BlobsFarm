@@ -23,4 +23,9 @@ public class BonusField extends AMapField{
     public void sendFieldContent(FieldContent fieldContent) {
 
     }
+
+    @Override
+    public double sendFood(double amount) {
+        return 0;
+    }
 }

@@ -1,8 +1,9 @@
 package Classes.Map;
 
-import Classes.Character.Agressor;
+import Classes.Character.Aggressor;
 import Classes.Character.Altruist;
 import Classes.Character.Killer;
+import Classes.Character.NeighbourType;
 import Interfaces.Live;
 
 import java.util.ArrayList;
@@ -11,20 +12,24 @@ import java.util.List;
 public class WorldMap {
     public static AMapField[][] fields;
     public static List<Live> objectsOnMap = new ArrayList<Live>();
-    private int x;
-    private int y;
+    private static int mapWidth;
+    private static int mapLength;
+    private static List<Integer> foodFieldCoords = new ArrayList<Integer>();
+    private static List<Integer> bonusFieldCoords = new ArrayList<Integer>();
+    private static List<Integer> trapFieldCoords = new ArrayList<Integer>();
     private static List<List<Integer>> usedCoords;
+    private static List<List<Integer>> crowdedFields = new ArrayList<List<Integer>>();
     private static int usedCoordsIndex = 0;
 
-    public WorldMap(int x, int y, int initialFoodAmount, int initialAltruistsNumber, int initialAgressorsNumber, int initialKillersNumber) {
-        this.x = x;
-        this.y = y;
-        fields = new AMapField[x][y];
+    public WorldMap(int mapWidth, int mapLength, int initialFoodAmount, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
+        this.mapWidth = mapWidth;
+        this.mapLength = mapLength;
+        fields = new AMapField[mapWidth][mapLength];
         usedCoords = new ArrayList<List<Integer>>();
-        generateFoodFields(initialFoodAmount, x, y);
-        generateBonusFields(x, y);
-        generateTrapFields(x, y);
-        generateCharacters(x, y, initialAltruistsNumber, initialAgressorsNumber, initialKillersNumber);
+        generateFoodFields(initialFoodAmount, mapWidth, mapLength);
+        generateBonusFields(mapWidth, mapLength);
+        generateTrapFields(mapWidth, mapLength);
+        generateCharacters(mapWidth, mapLength, initialAltruistsNumber, initialAggressorsNumber, initialKillersNumber);
     }
 
     public static void generateFoodFields(int amount, int x, int y) {
@@ -45,6 +50,8 @@ public class WorldMap {
                         coordsList.add(foodFieldY);
                         usedCoords.add(usedCoordsIndex, coordsList);
                         usedCoordsIndex += 1;
+                        foodFieldCoords.add(foodFieldX);
+                        foodFieldCoords.add(foodFieldY);
                     }
                 }
             } else {
@@ -57,6 +64,8 @@ public class WorldMap {
                 usedCoords.add(0, coordsList);
                 //get(0).set(foodFieldX, foodFieldY);
                 usedCoordsIndex += 1;
+                foodFieldCoords.add(foodFieldX);
+                foodFieldCoords.add(foodFieldY);
             }
         }
     }
@@ -80,6 +89,8 @@ public class WorldMap {
                         coordsList.add(bonusFieldY);
                         usedCoords.add(usedCoordsIndex, coordsList);
                         usedCoordsIndex += 1;
+                        bonusFieldCoords.add(bonusFieldX);
+                        bonusFieldCoords.add(bonusFieldY);
                     }
                 }
             } else {
@@ -92,6 +103,8 @@ public class WorldMap {
                 coordsList.add(bonusFieldY);
                 usedCoords.add(0, coordsList);
                 usedCoordsIndex += 1;
+                bonusFieldCoords.add(bonusFieldX);
+                bonusFieldCoords.add(bonusFieldY);
             }
         }
     }
@@ -114,6 +127,8 @@ public class WorldMap {
                         coordsList.add(trapFieldY);
                         usedCoords.add(usedCoordsIndex, coordsList);
                         usedCoordsIndex += 1;
+                        trapFieldCoords.add(trapFieldX);
+                        trapFieldCoords.add(trapFieldY);
                     }
                 }
             } else {
@@ -125,40 +140,156 @@ public class WorldMap {
                 coordsList.add(trapFieldY);
                 usedCoords.add(0, coordsList);
                 usedCoordsIndex += 1;
+                trapFieldCoords.add(trapFieldX);
+                trapFieldCoords.add(trapFieldY);
             }
         }
     }
 
-    public static void generateCharacters(int x, int y, int initialAltruistsNumber, int initialAgressorsNumber, int initialKillersNumber) {
+    public static void generateCharacters(int x, int y, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
         //generate altruists
         for (int i = 0; i < initialAltruistsNumber; i++) {
-            int altruistPositionX = (int) (Math.random() * x);
-            int altruistPositionY = (int) (Math.random() * y);
-            int index = objectsOnMap.size();
-            ArrayList altruistIndicies = Altruist.getAltruistIndicies();
-            objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, "Altruist"));
-            altruistIndicies.add(index);
+            boolean findNewAltruistCoords = true;
+            while (findNewAltruistCoords) {
+                int altruistPositionX = (int) (Math.random() * x);
+                int altruistPositionY = (int) (Math.random() * y);
+                int crowd = 0;
+                for (List<Integer> list : crowdedFields) {
+                    if (altruistPositionX == list.get(0) && altruistPositionY == list.get(1)) {
+                        crowd += 1;
+                    }
+                }
+                if (crowd != 2) {
+                    findNewAltruistCoords = false;
+                    List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                    usedFieldCoords.add(altruistPositionX);
+                    usedFieldCoords.add(altruistPositionY);
+                    crowdedFields.add(usedFieldCoords);
+                    int index = objectsOnMap.size();
+                    ArrayList altruistIndicies = Altruist.getAltruistIndicies();
+                    objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, "Altruist"));
+                    altruistIndicies.add(index);
+                }
+            }
         }
 
-        for (int i = 0; i < initialAgressorsNumber; i++) {
-            //generate agressors
-            int agressorsPositionX = (int) (Math.random() * x);
-            int agressorsPositionY = (int) (Math.random() * y);
-            int index = objectsOnMap.size();
-            ArrayList agressorIndicies = Agressor.getAgressorIndicies();
-            objectsOnMap.add(new Agressor(agressorsPositionX, agressorsPositionY, true, "Agressor"));
-            agressorIndicies.add(index);
+        for (int i = 0; i < initialAggressorsNumber; i++) {
+            //generate aggressors
+            boolean findNewAggressorCoords = true;
+            while (findNewAggressorCoords) {
+                int aggressorsPositionX = (int) (Math.random() * x);
+                int aggressorsPositionY = (int) (Math.random() * y);
+                int crowd = 0;
+                for (List<Integer> list : crowdedFields) {
+                    if (aggressorsPositionX == list.get(0) && aggressorsPositionY == list.get(1)) {
+                        crowd += 1;
+                    }
+                }
+                if (crowd != 2) {
+                    findNewAggressorCoords = false;
+                    List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                    usedFieldCoords.add(aggressorsPositionX);
+                    usedFieldCoords.add(aggressorsPositionY);
+                    crowdedFields.add(usedFieldCoords);
+                    int index = objectsOnMap.size();
+                    ArrayList aggressorIndicies = Aggressor.getAggressorIndicies();
+                    objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, "Aggressor"));
+                    aggressorIndicies.add(index);
+                }
+            }
         }
 
         for (int i = 0; i < initialKillersNumber; i++) {
-            //generate killers
-            int killersPositionX = (int) (Math.random() * x);
-            int killersPositionY = (int) (Math.random() * y);
-            objectsOnMap.add(new Killer(killersPositionX, killersPositionY, true, "Killer"));
+            //generate aggressors
+            boolean findNewKillerCoords = true;
+            while (findNewKillerCoords) {
+                int killerPositionX = (int) (Math.random() * x);
+                int killerPositionY = (int) (Math.random() * y);
+                int crowd = 0;
+                for (List<Integer> list : crowdedFields) {
+                    if (killerPositionX == list.get(0) && killerPositionY == list.get(1)) {
+                        crowd += 1;
+                    }
+                }
+                if (crowd != 2) {
+                    findNewKillerCoords = false;
+                    List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                    usedFieldCoords.add(killerPositionX);
+                    usedFieldCoords.add(killerPositionY);
+                    crowdedFields.add(usedFieldCoords);
+                    objectsOnMap.add(new Killer(killerPositionX, killerPositionY, true, "Killer"));
+                }
+            }
+        }
+    }
+
+    public static void mapUpdate() {
+        for(var list : crowdedFields){
+            list = null;
+        }
+        for (var blob : objectsOnMap) {
+//            blob.setNeighbourType(NeighbourType.NONE);
+//            int positionX = (int) (Math.random() * mapWidth);
+//            int positionY = (int) (Math.random() * mapLength);
+//            blob.setCoords(positionX, positionY);
+            boolean findNewBlobCoords = true;
+            while (findNewBlobCoords) {
+                int positionX = (int) (Math.random() * mapWidth);
+                int positionY = (int) (Math.random() * mapLength);
+                int crowd = 0;
+                for (List<Integer> list : crowdedFields) {
+                    if (positionX == list.get(0) && positionY == list.get(1)) {
+                        crowd += 1;
+                    }
+                }
+                if (crowd != 2) {
+                    findNewBlobCoords = false;
+                    List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                    usedFieldCoords.add(positionX);
+                    usedFieldCoords.add(positionY);
+                    crowdedFields.add(usedFieldCoords);
+                    blob.setCoords(positionX, positionY);
+                }
+            }
+        }
+        for (var blob : objectsOnMap) {
+            blob.interactWithLive(blob);
+            int x = blob.getCoords("x");
+            int y = blob.getCoords("y");
+            AMapField field = null;
+            for (int i = 0; i < foodFieldCoords.size(); i += 2) {
+                if (foodFieldCoords.get(i) == x && foodFieldCoords.get(i + 1) == y) {
+                    field = fields[x][y];
+                }
+            }
+            for (int i = 0; i < bonusFieldCoords.size(); i += 2) {
+                if (bonusFieldCoords.get(i) == x && bonusFieldCoords.get(i + 1) == y) {
+                    field = fields[x][y];
+                }
+            }
+            for (int i = 0; i < trapFieldCoords.size(); i += 2) {
+                if (trapFieldCoords.get(i) == x && trapFieldCoords.get(i + 1) == y) {
+                    field = fields[x][y];
+                }
+            }
+            //blob.setMapFieldType(FoodField);
+            blob.interactWithAMapField(field);
         }
     }
 
     public static List<Live> getObjectsOnMap() {
         return objectsOnMap;
+    }
+
+    public static List<Integer> getFoodFieldCoords() {
+        return foodFieldCoords;
+    }
+
+    public static List<Integer> getBonusFieldCoords() {
+        return bonusFieldCoords;
+    }
+
+    public static List<Integer> getTrapFieldCoords() {
+        return trapFieldCoords;
     }
 }

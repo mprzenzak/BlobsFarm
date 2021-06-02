@@ -37,4 +37,9 @@ public class FoodField extends AMapField {
     public void sendFieldContent(FieldContent fieldContent) {
 
     }
+
+    @Override
+    public double sendFood(double amount) {
+        return amount;
+    }
 }

@@ -5,14 +5,15 @@ import Classes.Map.FieldContent;
 import Classes.Map.WorldMap;
 import Interfaces.Live;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class Killer extends ABlob {
+public class Aggressor extends ABlob {
+    public static final ArrayList<Integer> AggressorIndcies = new ArrayList<>();
     //public int[][] position;
 
-    public Killer(int x, int y, boolean alive, String characteristic) {
+    public Aggressor(int x, int y, boolean alive, String characteristic) {
         super(x, y, alive, characteristic);
-        //interactWithLive();
     }
 
     @Override
@@ -27,12 +28,7 @@ public class Killer extends ABlob {
 
     @Override
     public void interactWithLive(Live live) {
-        List<Live> blobs = WorldMap.getObjectsOnMap();
-        for (var blob : blobs) {
-            if (blob.getIndex() != this.index){
-                blob.die(blobs);
-            }
-        }
+        live.setNeighbourType(NeighbourType.AGGRESSOR);
     }
 
     @Override
@@ -64,5 +60,9 @@ public class Killer extends ABlob {
             if (field != null && field.x == trapFieldCoords.get(i) && field.y == trapFieldCoords.get(i + 1))
                 field.sendFieldContent(FieldContent.TRAP);
         }
+    }
+
+    public static ArrayList<Integer> getAggressorIndicies() {
+        return AggressorIndcies;
     }
 }
