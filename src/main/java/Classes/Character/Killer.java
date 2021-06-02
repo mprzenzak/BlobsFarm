@@ -36,8 +36,8 @@ public class Killer extends ABlob {
     }
 
     @Override
-    public void isAlive() {
-
+    public boolean isAlive() {
+        return true;
     }
 
     @Override

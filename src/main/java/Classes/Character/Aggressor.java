@@ -11,14 +11,40 @@ import java.util.List;
 public class Aggressor extends ABlob {
     public static final ArrayList<Integer> AggressorIndcies = new ArrayList<>();
     //public int[][] position;
+    private static double foodAvailable = 0;
+    private boolean alive;
 
     public Aggressor(int x, int y, boolean alive, String characteristic) {
         super(x, y, alive, characteristic);
+        this.alive = true;
     }
 
     @Override
     public void reproduce() {
-
+        List<Live> objectsOnMap = WorldMap.getObjectsOnMap();
+        List<List<Integer>> crowdedFields = WorldMap.getCrowdedFields();
+        boolean findNewAggressorCoords = true;
+        while (findNewAggressorCoords) {
+            int aggressorsPositionX = (int) (Math.random() * x);
+            int aggressorsPositionY = (int) (Math.random() * y);
+            int crowd = 0;
+            for (List<Integer> list : crowdedFields) {
+                if (aggressorsPositionX == list.get(0) && aggressorsPositionY == list.get(1)) {
+                    crowd += 1;
+                }
+            }
+            if (crowd != 2) {
+                findNewAggressorCoords = false;
+                List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                usedFieldCoords.add(aggressorsPositionX);
+                usedFieldCoords.add(aggressorsPositionY);
+                crowdedFields.add(usedFieldCoords);
+                int index = objectsOnMap.size();
+                ArrayList aggressorIndicies = Aggressor.getAggressorIndicies();
+                objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, "Aggressor"));
+                aggressorIndicies.add(index);
+            }
+        }
     }
 
     @Override
@@ -32,8 +58,8 @@ public class Aggressor extends ABlob {
     }
 
     @Override
-    public void isAlive() {
-
+    public boolean isAlive() {
+        return alive;
     }
 
     @Override
@@ -41,15 +67,15 @@ public class Aggressor extends ABlob {
         List<Integer> foodFieldCoords = WorldMap.getFoodFieldCoords();
         List<Integer> bonusFieldCoords = WorldMap.getBonusFieldCoords();
         List<Integer> trapFieldCoords = WorldMap.getTrapFieldCoords();
-        for (int i = 0; i < WorldMap.getFoodFieldCoords().size()-3; i += 2) {
+        for (int i = 0; i < WorldMap.getFoodFieldCoords().size() - 3; i += 2) {
             if (field != null && field.x == foodFieldCoords.get(i) && field.y == foodFieldCoords.get(i + 1))
                 switch (neighbourType) {
                     case NONE:
-                        field.sendFood(2);
+                        foodAvailable = field.sendFood(2);
                     case ALTRUIST:
-                        field.sendFood(1.5);
+                        foodAvailable = field.sendFood(1.5);
                     case AGGRESSOR:
-                        field.sendFood(0);
+                        foodAvailable = field.sendFood(0);
                 }
         }
         for (int i = 0; i < WorldMap.getBonusFieldCoords().size(); i += 2) {
@@ -59,6 +85,12 @@ public class Aggressor extends ABlob {
         for (int i = 0; i < WorldMap.getTrapFieldCoords().size(); i += 2) {
             if (field != null && field.x == trapFieldCoords.get(i) && field.y == trapFieldCoords.get(i + 1))
                 field.sendFieldContent(FieldContent.TRAP);
+        }
+
+        if (foodAvailable == 2) {
+            reproduce();
+        } else if (foodAvailable < 1) {
+            alive = false;
         }
     }
 

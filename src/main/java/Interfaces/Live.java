@@ -15,7 +15,7 @@ public interface Live {
 
     void die(List objectsOnMap);
 
-    void isAlive();
+    boolean isAlive();
 
     void interactWithAMapField(AMapField field);
 

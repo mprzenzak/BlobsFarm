@@ -292,4 +292,8 @@ public class WorldMap {
     public static List<Integer> getTrapFieldCoords() {
         return trapFieldCoords;
     }
+
+    public static List<List<Integer>> getCrowdedFields() {
+        return crowdedFields;
+    }
 }
