@@ -2,8 +2,6 @@ package Classes.Map;
 
 import Interfaces.Live;
 
-import java.util.List;
-
 public class FoodField extends AMapField {
     private static int foodStorage = 2;
 
@@ -11,13 +9,13 @@ public class FoodField extends AMapField {
         this.foodStorage = foodStorage;
     }
 
-    public void removeFood() {
-
-    }
-
-    public void sendFood() {
-
-    }
+//    public void removeFood() {
+//
+//    }
+//
+//    public void sendFood() {
+//
+//    }
 
     @Override
     public void interactWithLive(Live live) {
@@ -34,12 +32,22 @@ public class FoodField extends AMapField {
     }
 
     @Override
-    public void sendFieldContent(FieldContent fieldContent) {
+    public boolean checkIfTrapUsed() {
+        return false;
+    }
 
+    @Override
+    public FieldContent sendFieldContent() {
+        return null;
     }
 
     @Override
     public double sendFood(double amount) {
         return amount;
+    }
+
+    @Override
+    public void setFieldContent(FieldContent fieldContent) {
+
     }
 }

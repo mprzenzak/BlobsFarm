@@ -9,7 +9,7 @@ import java.util.List;
 public interface Live {
     void reproduce();
 
-    void getFieldContent(FieldContent fieldContent);
+//    void getFieldContent(FieldContent fieldContent);
 
     void interactWithLive(Live live);
 
@@ -30,4 +30,8 @@ public interface Live {
     int getIndex();
 
     void setNeighbourType(NeighbourType neighbourType);
+
+    boolean isImmortal();
+
+    NeighbourType getNeighbourType();
 }

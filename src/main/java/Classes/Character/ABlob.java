@@ -1,6 +1,7 @@
 package Classes.Character;
 
 import Classes.Map.AMapField;
+import Classes.Map.WorldMap;
 import Interfaces.Live;
 
 import java.util.List;
@@ -14,11 +15,12 @@ public abstract class ABlob implements Live {
     protected String characteristic;
     public NeighbourType neighbourType;
 
-    public ABlob(int x, int y, boolean alive, String characteristic) {
+    public ABlob(int x, int y, boolean alive, String characteristic, int index) {
         this.x = x;
         this.y = y;
         this.alive = alive;
         this.characteristic = characteristic;
+        this.index = index;
     }
 
     @Override
@@ -47,6 +49,7 @@ public abstract class ABlob implements Live {
 
     public void die(List objectsOnMap) {
         objectsOnMap.set(index, null);
+        WorldMap.updateBlobsAmount(1);
     }
 
     public void setNeighbourType(NeighbourType neighbourType){
@@ -56,5 +59,9 @@ public abstract class ABlob implements Live {
     @Override
     public void setMapFieldType(AMapField aMapField){
         this.aMapField = aMapField;
+    }
+    @Override
+    public NeighbourType getNeighbourType(){
+        return neighbourType;
     }
 }
