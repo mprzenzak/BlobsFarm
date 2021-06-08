@@ -23,7 +23,7 @@ public class WorldMap {
     private static int usedCoordsIndex = 0;
     private static int blobsWhoDiedToday;
 
-    public WorldMap(int mapWidth, int mapLength, int initialFoodNumber,int initialBonusesNumber, int initialTrapsNumber, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
+    public WorldMap(int mapWidth, int mapLength, int initialFoodNumber, int initialBonusesNumber, int initialTrapsNumber, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
         this.mapWidth = mapWidth;
         this.mapLength = mapLength;
         fields = new AMapField[mapWidth][mapLength];
@@ -49,7 +49,6 @@ public class WorldMap {
                     } else {
                         contains = false;
                         fields[foodFieldX][foodFieldY] = new FoodField(2);
-                        //usedCoords.get(usedCoordsIndex).set(foodFieldX, foodFieldY);
                         List<Integer> coordsList = new ArrayList<Integer>();
                         coordsList.add(foodFieldX);
                         coordsList.add(foodFieldY);
@@ -69,7 +68,6 @@ public class WorldMap {
                 coordsList.add(foodFieldX);
                 coordsList.add(foodFieldY);
                 usedCoords.add(0, coordsList);
-                //get(0).set(foodFieldX, foodFieldY);
                 usedCoordsIndex += 1;
                 foodFieldCoords.add(foodFieldX);
                 foodFieldCoords.add(foodFieldY);
@@ -80,7 +78,6 @@ public class WorldMap {
     }
 
     public static void generateBonusFields(int x, int y, int initialBonusesNumber) {
-        //przyjmuje 5% pól bonusowych
         for (int i = 0; i < initialBonusesNumber; i++) {
             boolean contains = true;
             if (usedCoordsIndex != 0) {
@@ -95,7 +92,7 @@ public class WorldMap {
                         contains = true;
                     } else {
                         contains = false;
-                        fields[bonusFieldX][bonusFieldY] = new BonusField();// = new BonusField(bonus);
+                        fields[bonusFieldX][bonusFieldY] = new BonusField();
                         List<Integer> coordsList = new ArrayList<Integer>();
                         coordsList.add(bonusFieldX);
                         coordsList.add(bonusFieldY);
@@ -110,8 +107,7 @@ public class WorldMap {
             } else {
                 int bonusFieldX = (int) (Math.random() * x);
                 int bonusFieldY = (int) (Math.random() * y);
-//                Bonuses bonus = Bonuses.getRandomBonus();
-                fields[bonusFieldX][bonusFieldY] = new BonusField();//new BonusField(bonus);
+                fields[bonusFieldX][bonusFieldY] = new BonusField();
                 List<Integer> coordsList = new ArrayList<Integer>();
                 coordsList.add(bonusFieldX);
                 coordsList.add(bonusFieldY);
@@ -126,7 +122,6 @@ public class WorldMap {
     }
 
     public static void generateTrapFields(int x, int y, int initialTrapsNumber) {
-        //przyjmuje 5% pól pułapek
         for (int i = 0; i < initialTrapsNumber; i++) {
             boolean contains = true;
             if (usedCoordsIndex != 0) {
@@ -171,7 +166,6 @@ public class WorldMap {
     }
 
     public static void generateCharacters(int x, int y, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
-        //generate altruists
         for (int i = 0; i < initialAltruistsNumber; i++) {
             boolean findNewAltruistCoords = true;
             while (findNewAltruistCoords) {
@@ -200,7 +194,6 @@ public class WorldMap {
         }
 
         for (int i = 0; i < initialAggressorsNumber; i++) {
-            //generate aggressors
             boolean findNewAggressorCoords = true;
             while (findNewAggressorCoords) {
                 int aggressorsPositionX = (int) (Math.random() * x);
@@ -228,7 +221,6 @@ public class WorldMap {
         }
 
         for (int i = 0; i < initialKillersNumber; i++) {
-            //generate aggressors
             boolean findNewKillerCoords = true;
             while (findNewKillerCoords) {
                 int killerPositionX = (int) (Math.random() * x);
@@ -272,10 +264,6 @@ public class WorldMap {
                 blob.setNeighbourType(NeighbourType.NONE);
         }
         for (var blob : objectsOnMap) {
-//            blob.setNeighbourType(NeighbourType.NONE);
-//            int positionX = (int) (Math.random() * mapWidth);
-//            int positionY = (int) (Math.random() * mapLength);
-//            blob.setCoords(positionX, positionY);
             if (blob != null) {
                 boolean findNewBlobCoords = true;
                 while (findNewBlobCoords) {
@@ -300,18 +288,12 @@ public class WorldMap {
                 }
             }
         }
-        for(int k = 0;k<=objectsOnMap.size()-1;k++){
+        for (int k = 0; k <= objectsOnMap.size() - 1; k++) {
             var blob = objectsOnMap.get(k);
-//        for (var blob : objectsOnMap) {
             if (blob != null) {
                 int x = blob.getCoords("x");
                 int y = blob.getCoords("y");
                 AMapField field = null;
-//                for (var neighbourBlob : objectsOnMap) {
-//                    if (neighbourBlob.getCoords("x") == x && neighbourBlob.getCoords("y") == y) {
-//                        blob.interactWithLive(neighbourBlob);
-//                    }
-//                }
                 for (int i = 0; i < foodFieldCoords.size(); i += 2) {
                     if (foodFieldCoords.get(i) == x && foodFieldCoords.get(i + 1) == y) {
                         field = fields[x][y];
@@ -327,12 +309,6 @@ public class WorldMap {
                         field = fields[x][y];
                     }
                 }
-//                for (var neighbourBlob : objectsOnMap) {
-//                    if (neighbourBlob.getCoords("x") == x && neighbourBlob.getCoords("y") == y) {
-//                        blob.interactWithLive(neighbourBlob);
-//                    }
-//                }
-                //blob.setMapFieldType(FoodField);
                 blob.interactWithAMapField(field, mapWidth, mapLength);
             }
         }
@@ -342,7 +318,6 @@ public class WorldMap {
                 int y = blob.getCoords("y");
                 for (var neighbourBlob : objectsOnMap) {
                     if (neighbourBlob != null && neighbourBlob.getCoords("x") == x && neighbourBlob.getCoords("y") == y && blob.getNeighbourType() == NeighbourType.NONE) {
-                        //blob.interactWithLive(neighbourBlob);
                         neighbourBlob.interactWithLive(blob);
                         blob.interactWithLive(neighbourBlob);
                     }
