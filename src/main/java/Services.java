@@ -66,8 +66,6 @@ public class Services {
 //        } while (correctParameters == false);
 
 
-
-
         getParameters();
 //        mapWidth = 5;
 //        mapLength = 5;
@@ -130,6 +128,10 @@ public class Services {
             System.out.println(currentBlobsNumber);
             WorldMap.mapUpdate();
             currentBlobsNumber -= WorldMap.getDiedBlobs();
+            if (currentBlobsNumber <= 0) {
+                System.out.println("Niestety wszystkie blobki umarły");
+                currentBlobsNumber = 0;
+            }
             FileWriter csvWriter = new FileWriter("population.csv", true);
             csvWriter.write("Day " + i + " " + currentBlobsNumber + "\n");
             csvWriter.flush();
