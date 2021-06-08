@@ -29,19 +29,26 @@ public class Altruist extends ABlob {
             if (blob != null)
                 aliveBlob += 1;
         }
-        while (mapLength * mapWidth * 2 > aliveBlob) {
-            for (var blob : objectsOnMap) {
-                if (blob != null)
-                    aliveBlob += 1;
-            }
+        int attemptsCounter = 0;
+        if (mapLength * mapWidth * 2 > aliveBlob) {
+//            for (var blob : objectsOnMap) {
+//                if (blob != null)
+//                    aliveBlob += 1;
+//            }
             boolean findNewAltruistCoords = true;
             while (findNewAltruistCoords) {
+                if (attemptsCounter == 1000)
+                    break;
                 int altruistPositionX = (int) (Math.random() * mapWidth);
                 int altruistPositionY = (int) (Math.random() * mapLength);
                 int crowd = 0;
                 for (List<Integer> list : crowdedFields) {
-                    if (altruistPositionX == list.get(0) && altruistPositionY == list.get(1)) {
-                        crowd += 1;
+                    if (list != null & list.get(0) != null && list.get(1) != null) {
+                        if (altruistPositionX == list.get(0) && altruistPositionY == list.get(1)) {
+                            crowd += 1;
+                            if (crowd == 2)
+                                attemptsCounter += 1;
+                        }
                     }
                 }
                 if (crowd != 2) {
@@ -79,8 +86,9 @@ public class Altruist extends ABlob {
         List<Integer> foodFieldCoords = WorldMap.getFoodFieldCoords();
         List<Integer> bonusFieldCoords = WorldMap.getBonusFieldCoords();
         List<Integer> trapFieldCoords = WorldMap.getTrapFieldCoords();
+        //TODO
         for (int i = 0; i < WorldMap.getFoodFieldCoords().size() - 3; i += 2) {
-            if (field != null && field.x == foodFieldCoords.get(i) && field.y == foodFieldCoords.get(i + 1)) {
+            if (neighbourType != null && field != null && field.x == foodFieldCoords.get(i) && field.y == foodFieldCoords.get(i + 1)) {
                 switch (neighbourType) {
                     case NONE:
                         foodAvailable = field.sendFood(2);

@@ -179,8 +179,10 @@ public class WorldMap {
                 int altruistPositionY = (int) (Math.random() * y);
                 int crowd = 0;
                 for (List<Integer> list : crowdedFields) {
-                    if (altruistPositionX == list.get(0) && altruistPositionY == list.get(1)) {
-                        crowd += 1;
+                    if (list != null & list.get(0) != null && list.get(1) != null) {
+                        if (altruistPositionX == list.get(0) && altruistPositionY == list.get(1)) {
+                            crowd += 1;
+                        }
                     }
                 }
                 if (crowd != 2) {
@@ -205,8 +207,10 @@ public class WorldMap {
                 int aggressorsPositionY = (int) (Math.random() * y);
                 int crowd = 0;
                 for (List<Integer> list : crowdedFields) {
-                    if (aggressorsPositionX == list.get(0) && aggressorsPositionY == list.get(1)) {
-                        crowd += 1;
+                    if (list != null & list.get(0) != null && list.get(1) != null) {
+                        if (aggressorsPositionX == list.get(0) && aggressorsPositionY == list.get(1)) {
+                            crowd += 1;
+                        }
                     }
                 }
                 if (crowd != 2) {
@@ -231,8 +235,10 @@ public class WorldMap {
                 int killerPositionY = (int) (Math.random() * y);
                 int crowd = 0;
                 for (List<Integer> list : crowdedFields) {
-                    if (killerPositionX == list.get(0) && killerPositionY == list.get(1)) {
-                        crowd += 1;
+                    if (list != null & list.get(0) != null && list.get(1) != null) {
+                        if (killerPositionX == list.get(0) && killerPositionY == list.get(1)) {
+                            crowd += 1;
+                        }
                     }
                 }
                 if (crowd != 2) {
@@ -277,8 +283,10 @@ public class WorldMap {
                     int positionY = (int) (Math.random() * mapLength);
                     int crowd = 0;
                     for (List<Integer> list : crowdedFields) {
-                        if (positionX == list.get(0) && positionY == list.get(1)) {
-                            crowd += 1;
+                        if (list != null & list.get(0) != null && list.get(1) != null) {
+                            if (positionX == list.get(0) && positionY == list.get(1)) {
+                                crowd += 1;
+                            }
                         }
                     }
                     if (crowd != 2) {
@@ -292,7 +300,9 @@ public class WorldMap {
                 }
             }
         }
-        for (var blob : objectsOnMap) {
+        for(int k = 0;k<=objectsOnMap.size()-1;k++){
+            var blob = objectsOnMap.get(k);
+//        for (var blob : objectsOnMap) {
             if (blob != null) {
                 int x = blob.getCoords("x");
                 int y = blob.getCoords("y");

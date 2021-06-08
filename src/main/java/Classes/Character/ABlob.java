@@ -30,8 +30,8 @@ public abstract class ABlob implements Live {
     }
 
     @Override
-    public int getCoords(String coordinate){
-        if(coordinate == "x")
+    public int getCoords(String coordinate) {
+        if (coordinate == "x")
             return x;
         else
             return y;
@@ -50,18 +50,33 @@ public abstract class ABlob implements Live {
     public void die(List objectsOnMap) {
         objectsOnMap.set(index, null);
         WorldMap.updateBlobsAmount(1);
+        Live killedBlob = (Live) objectsOnMap.get(index);
+        List<List<Integer>> crowdedFields = WorldMap.getCrowdedFields();
+        if (killedBlob != null) {
+            int x = killedBlob.getCoords("x");
+            int y = killedBlob.getCoords("y");
+            for (var coords : crowdedFields) {
+                if (coords != null && coords.get(0) != null && coords.get(1) != null) {
+                    if (coords.get(0) == x && coords.get(1) == y) {
+                        coords.set(0, null);
+                        coords.set(1, null);
+                    }
+                }
+            }
+        }
     }
 
-    public void setNeighbourType(NeighbourType neighbourType){
+    public void setNeighbourType(NeighbourType neighbourType) {
         this.neighbourType = neighbourType;
     }
 
     @Override
-    public void setMapFieldType(AMapField aMapField){
+    public void setMapFieldType(AMapField aMapField) {
         this.aMapField = aMapField;
     }
+
     @Override
-    public NeighbourType getNeighbourType(){
+    public NeighbourType getNeighbourType() {
         return neighbourType;
     }
 }

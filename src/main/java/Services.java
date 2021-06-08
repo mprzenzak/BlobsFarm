@@ -64,7 +64,19 @@ public class Services {
 //            correctParameters = true;
         /////////////////////////////////////////////////////////////////////////
 //        } while (correctParameters == false);
+
+
+
+
         getParameters();
+//        mapWidth = 5;
+//        mapLength = 5;
+//        initialFoodNumber = 17;
+//        initialBonusesNumber = 4;
+//        initialTrapsNumber = 4;
+//        initialAltruistsNumber = 18;
+//        initialAggressorsNumber = 18;
+//        initialKillersNumber = 4;
         WorldMap map = new WorldMap(mapWidth, mapLength, initialFoodNumber, initialBonusesNumber, initialTrapsNumber, initialAltruistsNumber, initialAggressorsNumber, initialKillersNumber);
         currentBlobsNumber = initialBlobsNumber;
         dayIteration();

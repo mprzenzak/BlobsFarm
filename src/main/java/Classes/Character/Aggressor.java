@@ -30,19 +30,26 @@ public class Aggressor extends ABlob {
             if (blob != null)
                 aliveBlob += 1;
         }
-        while (mapLength * mapWidth * 2 > aliveBlob) {
-            for (var blob : objectsOnMap) {
-                if (blob != null)
-                    aliveBlob += 1;
-            }
+        int attemptsCounter = 0;
+        if (mapLength * mapWidth * 2 > aliveBlob) {
+//            for (var blob : objectsOnMap) {
+//                if (blob != null)
+//                    aliveBlob += 1;
+//            }
             boolean findNewAggressorCoords = true;
             while (findNewAggressorCoords) {
+                if (attemptsCounter == 1000)
+                    break;
                 int aggressorsPositionX = (int) (Math.random() * mapWidth);
                 int aggressorsPositionY = (int) (Math.random() * mapLength);
                 int crowd = 0;
                 for (List<Integer> list : crowdedFields) {
-                    if (aggressorsPositionX == list.get(0) && aggressorsPositionY == list.get(1)) {
-                        crowd += 1;
+                    if (list != null & list.get(0) != null && list.get(1) != null) {
+                        if (aggressorsPositionX == list.get(0) && aggressorsPositionY == list.get(1)) {
+                            crowd += 1;
+                            if (crowd == 2)
+                                attemptsCounter += 1;
+                        }
                     }
                 }
                 if (crowd != 2) {
@@ -81,7 +88,7 @@ public class Aggressor extends ABlob {
         List<Integer> bonusFieldCoords = WorldMap.getBonusFieldCoords();
         List<Integer> trapFieldCoords = WorldMap.getTrapFieldCoords();
         for (int i = 0; i < WorldMap.getFoodFieldCoords().size() - 3; i += 2) {
-            if (field != null && field.x == foodFieldCoords.get(i) && field.y == foodFieldCoords.get(i + 1)) {
+            if (neighbourType != null && field != null && field.x == foodFieldCoords.get(i) && field.y == foodFieldCoords.get(i + 1)) {
                 switch (neighbourType) {
                     case NONE:
                         foodAvailable = field.sendFood(2);
