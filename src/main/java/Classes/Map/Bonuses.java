@@ -3,7 +3,7 @@ package Classes.Map;
 import java.util.Random;
 
 public enum Bonuses {
-    EXTENDED_LIFE_LENGTH, GIVE10CHILDREN, MAKE_IMMORTAL, CHANGE_CHARACTERICTIC;
+    EXTENDED_LIFE_LENGTH, GIVE10CHILDREN, MAKE_IMMORTAL, CHANGE_CHARACTERISTICS;
 
     public static Bonuses getRandomBonus() {
         Random random = new Random();
