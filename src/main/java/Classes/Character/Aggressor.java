@@ -22,29 +22,40 @@ public class Aggressor extends ABlob {
     }
 
     @Override
-    public void reproduce() {
+    public void reproduce(int mapWidth, int mapLength) {
         List<Live> objectsOnMap = WorldMap.getObjectsOnMap();
         List<List<Integer>> crowdedFields = WorldMap.getCrowdedFields();
-        boolean findNewAggressorCoords = true;
-        while (findNewAggressorCoords) {
-            int aggressorsPositionX = (int) (Math.random() * x);
-            int aggressorsPositionY = (int) (Math.random() * y);
-            int crowd = 0;
-            for (List<Integer> list : crowdedFields) {
-                if (aggressorsPositionX == list.get(0) && aggressorsPositionY == list.get(1)) {
-                    crowd += 1;
-                }
+        int aliveBlob = 0;
+        for (var blob : objectsOnMap) {
+            if (blob != null)
+                aliveBlob += 1;
+        }
+        while (mapLength * mapWidth * 2 > aliveBlob) {
+            for (var blob : objectsOnMap) {
+                if (blob != null)
+                    aliveBlob += 1;
             }
-            if (crowd != 2) {
-                findNewAggressorCoords = false;
-                List<Integer> usedFieldCoords = new ArrayList<Integer>();
-                usedFieldCoords.add(aggressorsPositionX);
-                usedFieldCoords.add(aggressorsPositionY);
-                crowdedFields.add(usedFieldCoords);
-                int index = objectsOnMap.size();
-                ArrayList aggressorIndicies = Aggressor.getAggressorIndicies();
-                objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, "Aggressor",index));
-                aggressorIndicies.add(index);
+            boolean findNewAggressorCoords = true;
+            while (findNewAggressorCoords) {
+                int aggressorsPositionX = (int) (Math.random() * mapWidth);
+                int aggressorsPositionY = (int) (Math.random() * mapLength);
+                int crowd = 0;
+                for (List<Integer> list : crowdedFields) {
+                    if (aggressorsPositionX == list.get(0) && aggressorsPositionY == list.get(1)) {
+                        crowd += 1;
+                    }
+                }
+                if (crowd != 2) {
+                    findNewAggressorCoords = false;
+                    List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                    usedFieldCoords.add(aggressorsPositionX);
+                    usedFieldCoords.add(aggressorsPositionY);
+                    crowdedFields.add(usedFieldCoords);
+                    int index = objectsOnMap.size();
+                    ArrayList aggressorIndicies = Aggressor.getAggressorIndicies();
+                    objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, "Aggressor", index));
+                    aggressorIndicies.add(index);
+                }
             }
         }
     }
@@ -65,7 +76,7 @@ public class Aggressor extends ABlob {
     }
 
     @Override
-    public void interactWithAMapField(AMapField field) {
+    public void interactWithAMapField(AMapField field, int mapWidth, int mapLength) {
         List<Integer> foodFieldCoords = WorldMap.getFoodFieldCoords();
         List<Integer> bonusFieldCoords = WorldMap.getBonusFieldCoords();
         List<Integer> trapFieldCoords = WorldMap.getTrapFieldCoords();
@@ -106,7 +117,7 @@ public class Aggressor extends ABlob {
                             foodAvailable += 1;
                         case GIVE10CHILDREN:
                             for (int j = 0; j < 10; j++) {
-                                reproduce();
+                                reproduce(mapWidth, mapLength);
                             }
                         case MAKE_IMMORTAL:
                             immortal = true;
@@ -183,7 +194,7 @@ public class Aggressor extends ABlob {
 //                field.markTrapAsUsed();
 //        }
         if (foodAvailable == 2) {
-            reproduce();
+            reproduce(mapWidth, mapLength);
         } else if (foodAvailable < 1) {
             alive = false;
         }

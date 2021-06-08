@@ -41,7 +41,10 @@ public class WorldMap {
                 while (contains == true) {
                     int foodFieldX = (int) (Math.random() * x);
                     int foodFieldY = (int) (Math.random() * y);
-                    if (usedCoords.contains(new int[]{foodFieldX, foodFieldY})) {
+                    List<Integer> coordsToCheck = new ArrayList<>();
+                    coordsToCheck.add(foodFieldX);
+                    coordsToCheck.add(foodFieldY);
+                    if (usedCoords.contains(coordsToCheck)) {
                         contains = true;
                     } else {
                         contains = false;
@@ -78,14 +81,17 @@ public class WorldMap {
 
     public static void generateBonusFields(int x, int y, int initialBonusesNumber) {
         //przyjmuje 5% pól bonusowych
-        for (int i = 0; i <= initialBonusesNumber; i++) {
+        for (int i = 0; i < initialBonusesNumber; i++) {
             boolean contains = true;
             if (usedCoordsIndex != 0) {
                 while (contains == true) {
                     int bonusFieldX = (int) (Math.random() * x);
                     int bonusFieldY = (int) (Math.random() * y);
                     Bonuses bonus = Bonuses.getRandomBonus();
-                    if (usedCoords.contains(new int[]{bonusFieldX, bonusFieldY})) {
+                    List<Integer> coordsToCheck = new ArrayList<>();
+                    coordsToCheck.add(bonusFieldX);
+                    coordsToCheck.add(bonusFieldY);
+                    if (usedCoords.contains(coordsToCheck)) {
                         contains = true;
                     } else {
                         contains = false;
@@ -121,13 +127,16 @@ public class WorldMap {
 
     public static void generateTrapFields(int x, int y, int initialTrapsNumber) {
         //przyjmuje 5% pól pułapek
-        for (int i = 0; i <= initialTrapsNumber; i++) {
+        for (int i = 0; i < initialTrapsNumber; i++) {
             boolean contains = true;
             if (usedCoordsIndex != 0) {
                 while (contains == true) {
                     int trapFieldX = (int) (Math.random() * x);
                     int trapFieldY = (int) (Math.random() * y);
-                    if (usedCoords.contains(new int[]{trapFieldX, trapFieldY})) {
+                    List<Integer> coordsToCheck = new ArrayList<>();
+                    coordsToCheck.add(trapFieldX);
+                    coordsToCheck.add(trapFieldY);
+                    if (usedCoords.contains(coordsToCheck)) {
                         contains = true;
                     } else {
                         contains = false;
@@ -314,7 +323,7 @@ public class WorldMap {
 //                    }
 //                }
                 //blob.setMapFieldType(FoodField);
-                blob.interactWithAMapField(field);
+                blob.interactWithAMapField(field, mapWidth, mapLength);
             }
         }
         for (var blob : objectsOnMap) {

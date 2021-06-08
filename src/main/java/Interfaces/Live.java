@@ -7,7 +7,7 @@ import Classes.Map.FieldContent;
 import java.util.List;
 
 public interface Live {
-    void reproduce();
+    void reproduce(int mapWidth, int mapLength);
 
 //    void getFieldContent(FieldContent fieldContent);
 
@@ -17,7 +17,7 @@ public interface Live {
 
     boolean isAlive();
 
-    void interactWithAMapField(AMapField field);
+    void interactWithAMapField(AMapField field, int mapWidth, int mapLength);
 
     void setCoords(int x, int y);
 

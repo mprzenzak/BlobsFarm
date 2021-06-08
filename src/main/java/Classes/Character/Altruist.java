@@ -21,29 +21,40 @@ public class Altruist extends ABlob {
     }
 
     @Override
-    public void reproduce() {
+    public void reproduce(int mapWidth, int mapLength) {
         List<Live> objectsOnMap = WorldMap.getObjectsOnMap();
         List<List<Integer>> crowdedFields = WorldMap.getCrowdedFields();
-        boolean findNewAltruistCoords = true;
-        while (findNewAltruistCoords) {
-            int altruistPositionX = (int) (Math.random() * x);
-            int altruistPositionY = (int) (Math.random() * y);
-            int crowd = 0;
-            for (List<Integer> list : crowdedFields) {
-                if (altruistPositionX == list.get(0) && altruistPositionY == list.get(1)) {
-                    crowd += 1;
-                }
+        int aliveBlob = 0;
+        for (var blob : objectsOnMap) {
+            if (blob != null)
+                aliveBlob += 1;
+        }
+        while (mapLength * mapWidth * 2 > aliveBlob) {
+            for (var blob : objectsOnMap) {
+                if (blob != null)
+                    aliveBlob += 1;
             }
-            if (crowd != 2) {
-                findNewAltruistCoords = false;
-                List<Integer> usedFieldCoords = new ArrayList<Integer>();
-                usedFieldCoords.add(altruistPositionX);
-                usedFieldCoords.add(altruistPositionY);
-                crowdedFields.add(usedFieldCoords);
-                int index = objectsOnMap.size();
-                ArrayList altruistIndicies = Altruist.getAltruistIndicies();
-                objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, "Altruist",index));
-                altruistIndicies.add(index);
+            boolean findNewAltruistCoords = true;
+            while (findNewAltruistCoords) {
+                int altruistPositionX = (int) (Math.random() * mapWidth);
+                int altruistPositionY = (int) (Math.random() * mapLength);
+                int crowd = 0;
+                for (List<Integer> list : crowdedFields) {
+                    if (altruistPositionX == list.get(0) && altruistPositionY == list.get(1)) {
+                        crowd += 1;
+                    }
+                }
+                if (crowd != 2) {
+                    findNewAltruistCoords = false;
+                    List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                    usedFieldCoords.add(altruistPositionX);
+                    usedFieldCoords.add(altruistPositionY);
+                    crowdedFields.add(usedFieldCoords);
+                    int index = objectsOnMap.size();
+                    ArrayList altruistIndicies = Altruist.getAltruistIndicies();
+                    objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, "Altruist", index));
+                    altruistIndicies.add(index);
+                }
             }
         }
     }
@@ -64,7 +75,7 @@ public class Altruist extends ABlob {
     }
 
     @Override
-    public void interactWithAMapField(AMapField field) {
+    public void interactWithAMapField(AMapField field, int mapWidth, int mapLength) {
         List<Integer> foodFieldCoords = WorldMap.getFoodFieldCoords();
         List<Integer> bonusFieldCoords = WorldMap.getBonusFieldCoords();
         List<Integer> trapFieldCoords = WorldMap.getTrapFieldCoords();
@@ -105,7 +116,7 @@ public class Altruist extends ABlob {
                             foodAvailable += 1;
                         case GIVE10CHILDREN:
                             for (int j = 0; j < 10; j++) {
-                                reproduce();
+                                reproduce(mapWidth, mapLength);
                             }
                         case MAKE_IMMORTAL:
                             immortal = true;
@@ -118,7 +129,7 @@ public class Altruist extends ABlob {
                 }
             }
         }
-            //TODO /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //TODO /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //        for (int i = 0; i < WorldMap.getBonusFieldCoords().size(); i += 2) {
 //            if (field != null && field.x == bonusFieldCoords.get(i) && field.y == bonusFieldCoords.get(i + 1)) {
 //                FieldContent fieldContent = field.sendFieldContent();
@@ -167,21 +178,21 @@ public class Altruist extends ABlob {
 //                }
 //            }
 //        }
-            //TODO /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        //TODO /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-            if (foodAvailable == 2) {
-                reproduce();
-            } else if (foodAvailable < 1) {
-                alive = false;
-            }
-        }
-
-        public static ArrayList<Integer> getAltruistIndicies () {
-            return AltruistIndcies;
-        }
-
-        @Override
-        public boolean isImmortal () {
-            return immortal;
+        if (foodAvailable == 2) {
+            reproduce(mapWidth, mapLength);
+        } else if (foodAvailable < 1) {
+            alive = false;
         }
     }
+
+    public static ArrayList<Integer> getAltruistIndicies() {
+        return AltruistIndcies;
+    }
+
+    @Override
+    public boolean isImmortal() {
+        return immortal;
+    }
+}

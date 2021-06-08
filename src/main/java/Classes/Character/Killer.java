@@ -12,22 +12,22 @@ public class Killer extends ABlob {
         super(x, y, alive, characteristic, index);
     }
 
-    @Override
-    public void reproduce() {
-
-    }
-
 //    @Override
 //    public void getFieldContent(FieldContent fieldContent) {
 //
 //    }
 
     @Override
+    public void reproduce(int mapWidth, int mapLength) {
+
+    }
+
+    @Override
     public void interactWithLive(Live live) {
         live.setNeighbourType(NeighbourType.KILLER);
         List<Live> blobs = WorldMap.getObjectsOnMap();
         for (var blob : blobs) {
-            if (blob != null && blob.getIndex() != this.index) {
+            if (blob != null && blob.getIndex() == this.index) {
                 if (!blob.isImmortal()) {
                     blob.die(blobs);
                 }
@@ -41,7 +41,7 @@ public class Killer extends ABlob {
     }
 
     @Override
-    public void interactWithAMapField(AMapField field) {
+    public void interactWithAMapField(AMapField field, int mapWidth, int mapLength) {
         List<Integer> foodFieldCoords = WorldMap.getFoodFieldCoords();
         List<Integer> bonusFieldCoords = WorldMap.getBonusFieldCoords();
         List<Integer> trapFieldCoords = WorldMap.getTrapFieldCoords();
