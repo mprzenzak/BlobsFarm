@@ -66,11 +66,6 @@ public class Aggressor extends ABlob {
     }
 
     @Override
-    public boolean isAlive() {
-        return alive;
-    }
-
-    @Override
     public void interactWithAMapField(AMapField field, int mapWidth, int mapLength) {
         List<Integer> foodFieldCoords = FoodField.getFoodFieldCoords();
         for (int i = 0; i < FoodField.getFoodFieldCoords().size() - 3; i += 2) {

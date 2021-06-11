@@ -38,11 +38,6 @@ public abstract class ABlob implements Live {
     }
 
     @Override
-    public void setIndex(int index) {
-        this.index = index;
-    }
-
-    @Override
     public int getIndex() {
         return index;
     }
@@ -55,11 +50,6 @@ public abstract class ABlob implements Live {
 
     public void setNeighbourType(NeighbourType neighbourType) {
         this.neighbourType = neighbourType;
-    }
-
-    @Override
-    public void setMapFieldType(AMapField aMapField) {
-        this.aMapField = aMapField;
     }
 
     @Override

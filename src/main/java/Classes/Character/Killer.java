@@ -30,11 +30,6 @@ public class Killer extends ABlob {
     }
 
     @Override
-    public boolean isAlive() {
-        return true;
-    }
-
-    @Override
     public void interactWithAMapField(AMapField field, int mapWidth, int mapLength) {
 
     }

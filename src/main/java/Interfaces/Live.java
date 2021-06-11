@@ -12,17 +12,11 @@ public interface Live {
 
     void die(List objectsOnMap);
 
-    boolean isAlive();
-
     void interactWithAMapField(AMapField field, int mapWidth, int mapLength);
 
     void setCoords(int x, int y);
 
     int getCoords(String coordinate);
-
-    void setMapFieldType(AMapField field);
-
-    void setIndex(int index);
 
     int getIndex();
 
