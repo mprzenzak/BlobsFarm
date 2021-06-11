@@ -40,6 +40,7 @@ public abstract class ABlob implements Live {
         return index;
     }
 
+    @Override
     public void die(List objectsOnMap) {
         objectsOnMap.set(index, null);
         WorldMap.updateBlobsAmount(1);
