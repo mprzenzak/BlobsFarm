@@ -47,6 +47,7 @@ public abstract class ABlob implements Live {
         WorldMap.updateCoordsAfterBlobDeath(index);
     }
 
+    @Override
     public void setNeighbourType(NeighbourType neighbourType) {
         this.neighbourType = neighbourType;
     }
