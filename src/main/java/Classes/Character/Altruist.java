@@ -31,10 +31,6 @@ public class Altruist extends ABlob {
         }
         int attemptsCounter = 0;
         if (mapLength * mapWidth * 2 > aliveBlob) {
-//            for (var blob : objectsOnMap) {
-//                if (blob != null)
-//                    aliveBlob += 1;
-//            }
             boolean findNewAltruistCoords = true;
             while (findNewAltruistCoords) {
                 if (attemptsCounter == 1000)
@@ -66,11 +62,6 @@ public class Altruist extends ABlob {
         }
     }
 
-//    @Override
-//    public void getFieldContent(FieldContent fieldContent) {
-//
-//    }
-
     @Override
     public void interactWithLive(Live live) {
         live.setNeighbourType(NeighbourType.ALTRUIST);
@@ -83,13 +74,10 @@ public class Altruist extends ABlob {
 
     @Override
     public void interactWithAMapField(AMapField field, int mapWidth, int mapLength) {
-        List<Integer> foodFieldCoords = WorldMap.getFoodFieldCoords();
-        List<Integer> bonusFieldCoords = WorldMap.getBonusFieldCoords();
-        List<Integer> trapFieldCoords = WorldMap.getTrapFieldCoords();
-        //TODO
-        for (int i = 0; i < WorldMap.getFoodFieldCoords().size() - 3; i += 2) {
-            if (neighbourType != null && field != null && field.x == foodFieldCoords.get(i) && field.y == foodFieldCoords.get(i + 1)) {
-                switch (neighbourType) {
+        List<Integer> foodFieldCoords = FoodField.getFoodFieldCoords();
+        for (int i = 0; i < FoodField.getFoodFieldCoords().size() - 3; i += 2) {
+            if (this.getNeighbourType() != null && field != null && field.getX() == foodFieldCoords.get(i) && field.getY() == foodFieldCoords.get(i + 1)) {
+                switch (this.getNeighbourType()) {
                     case NONE:
                         foodAvailable = field.sendFood(2);
                     case ALTRUIST:
@@ -98,25 +86,10 @@ public class Altruist extends ABlob {
                         foodAvailable = field.sendFood(0.5);
                 }
             }
-//            } else {
-//                FieldContent fieldContent = field.sendFieldContent();
-//                switch (fieldContent) {
-//                    case EXTENDED_LIFE_LENGTH:
-//                        foodAvailable += 1;
-//                    case GIVE10CHILDREN:
-//                        for (int j = 0; j < 10; j++) {
-//                            reproduce();
-//                        }
-//                    case MAKE_IMMORTAL:
-//                        immortal = true;
-//                    case TRAP:
-//                        die(WorldMap.getObjectsOnMap());
-//                }
-//            }
         }
         List<Integer> fieldsCoords = WorldMap.getFieldsCoords();
         for (int i = 0; i < fieldsCoords.size(); i += 2) {
-            if (field != null && field.x == fieldsCoords.get(i) && field.y == fieldsCoords.get(i + 1)) {
+            if (field != null && field.getX() == fieldsCoords.get(i) && field.getY() == fieldsCoords.get(i + 1)) {
                 FieldContent fieldContent = field.sendFieldContent();
                 if (fieldContent != null) {
                     switch (fieldContent) {
@@ -129,66 +102,14 @@ public class Altruist extends ABlob {
                         case MAKE_IMMORTAL:
                             immortal = true;
                         case TRAP:
-                            die(WorldMap.getObjectsOnMap());
-//                        default:
-//                            throw new IllegalStateException("Unexpected valueeeeeeeeee: " + fieldContent);
-
-                    }
+                            if (field.checkIfTrapUsed()==false) {
+                                die(WorldMap.getObjectsOnMap());
+                                field.markTrapAsUsed();
+                            } }
                 }
             }
         }
-        //TODO /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-//        for (int i = 0; i < WorldMap.getBonusFieldCoords().size(); i += 2) {
-//            if (field != null && field.x == bonusFieldCoords.get(i) && field.y == bonusFieldCoords.get(i + 1)) {
-//                FieldContent fieldContent = field.sendFieldContent();
-//                if (fieldContent != null) {
-//                    switch (fieldContent) {
-//                        case EXTENDED_LIFE_LENGTH:
-//                            foodAvailable += 1;
-//                        case GIVE10CHILDREN:
-//                            for (int j = 0; j < 10; j++) {
-//                                reproduce();
-//                            }
-//                        case MAKE_IMMORTAL:
-//                            immortal = true;
-////                        case TRAP:
-////                            die(WorldMap.getObjectsOnMap());
-//                        default:
-//                            throw new IllegalStateException("Unexpected valueeeeeeeeee: " + fieldContent);
-//
-//                    }
-//                }
-//            }
-//        }
-//        for (int i = 0; i < WorldMap.getTrapFieldCoords().size(); i += 2) {
-//            if (field != null && field.x == trapFieldCoords.get(i) && field.y == trapFieldCoords.get(i + 1)) {
-//                FieldContent fieldContent = field.sendFieldContent();
-//                if (fieldContent != null) {
-//                //TODO fieldContent is null
-//                    switch (fieldContent) {
-////                        case EXTENDED_LIFE_LENGTH:
-////                            foodAvailable += 1;
-////                        case GIVE10CHILDREN:
-////                            for (int j = 0; j < 10; j++) {
-////                                reproduce();
-////                            }
-////                        case MAKE_IMMORTAL:
-////                            immortal = true;
-//                        case TRAP:
-//                            if (field.checkIfTrapUsed()) {
-//                                die(WorldMap.getObjectsOnMap());
-//                                field.markTrapAsUsed();
-//                            }
-//
-//                        default:
-//                            throw new IllegalStateException("Unexpected valueeeeeeeeee: " + fieldContent);
-//                    }
-//                }
-//            }
-//        }
-        //TODO /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-        if (foodAvailable == 2) {
+       if (foodAvailable == 2) {
             reproduce(mapWidth, mapLength);
         } else if (foodAvailable < 1) {
             alive = false;

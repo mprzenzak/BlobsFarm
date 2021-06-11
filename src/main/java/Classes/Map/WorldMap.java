@@ -11,30 +11,27 @@ import java.util.List;
 
 public class WorldMap {
     public static AMapField[][] fields;
-    public static List<Live> objectsOnMap = new ArrayList<Live>();
-    private static int mapWidth;
-    private static int mapLength;
-    private static List<Integer> foodFieldCoords = new ArrayList<Integer>();
-    private static List<Integer> bonusFieldCoords = new ArrayList<Integer>();
-    private static List<Integer> trapFieldCoords = new ArrayList<Integer>();
-    private static List<Integer> fieldsCoords = new ArrayList<Integer>();
+    public static List<Live> objectsOnMap = new ArrayList<>();
+    private int mapWidth;
+    private int mapLength;
+    private static List<Integer> fieldsCoords = new ArrayList<>();
     private static List<List<Integer>> usedCoords;
-    private static List<List<Integer>> crowdedFields = new ArrayList<List<Integer>>();
-    private static int usedCoordsIndex = 0;
+    private static List<List<Integer>> crowdedFields = new ArrayList<>();
+    private int usedCoordsIndex = 0;
     private static int blobsWhoDiedToday;
 
     public WorldMap(int mapWidth, int mapLength, int initialFoodNumber, int initialBonusesNumber, int initialTrapsNumber, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
         this.mapWidth = mapWidth;
         this.mapLength = mapLength;
         fields = new AMapField[mapWidth][mapLength];
-        usedCoords = new ArrayList<List<Integer>>();
+        usedCoords = new ArrayList<>();
         generateFoodFields(initialFoodNumber, mapWidth, mapLength);
         generateBonusFields(mapWidth, mapLength, initialBonusesNumber);
         generateTrapFields(mapWidth, mapLength, initialTrapsNumber);
         generateCharacters(mapWidth, mapLength, initialAltruistsNumber, initialAggressorsNumber, initialKillersNumber);
     }
 
-    public static void generateFoodFields(int amount, int x, int y) {
+    public void generateFoodFields(int amount, int x, int y) {
         for (int i = 0; i < amount; i++) {
             boolean contains = true;
             if (usedCoordsIndex != 0) {
@@ -48,14 +45,14 @@ public class WorldMap {
                         contains = true;
                     } else {
                         contains = false;
-                        fields[foodFieldX][foodFieldY] = new FoodField(2);
+                        fields[foodFieldX][foodFieldY] = new FoodField(foodFieldX, foodFieldY, 2);
                         List<Integer> coordsList = new ArrayList<Integer>();
                         coordsList.add(foodFieldX);
                         coordsList.add(foodFieldY);
                         usedCoords.add(usedCoordsIndex, coordsList);
                         usedCoordsIndex += 1;
-                        foodFieldCoords.add(foodFieldX);
-                        foodFieldCoords.add(foodFieldY);
+                        FoodField.getFoodFieldCoords().add(foodFieldX);
+                        FoodField.getFoodFieldCoords().add(foodFieldY);
                         fieldsCoords.add(foodFieldX);
                         fieldsCoords.add(foodFieldY);
                     }
@@ -63,28 +60,27 @@ public class WorldMap {
             } else {
                 int foodFieldX = (int) (Math.random() * x);
                 int foodFieldY = (int) (Math.random() * y);
-                fields[foodFieldX][foodFieldY] = new FoodField(2);
-                List<Integer> coordsList = new ArrayList<Integer>();
+                fields[foodFieldX][foodFieldY] = new FoodField(foodFieldX, foodFieldY, 2);
+                List<Integer> coordsList = new ArrayList<>();
                 coordsList.add(foodFieldX);
                 coordsList.add(foodFieldY);
                 usedCoords.add(0, coordsList);
                 usedCoordsIndex += 1;
-                foodFieldCoords.add(foodFieldX);
-                foodFieldCoords.add(foodFieldY);
+                FoodField.getFoodFieldCoords().add(foodFieldX);
+                FoodField.getFoodFieldCoords().add(foodFieldY);
                 fieldsCoords.add(foodFieldX);
                 fieldsCoords.add(foodFieldY);
             }
         }
     }
 
-    public static void generateBonusFields(int x, int y, int initialBonusesNumber) {
+    public void generateBonusFields(int x, int y, int initialBonusesNumber) {
         for (int i = 0; i < initialBonusesNumber; i++) {
             boolean contains = true;
             if (usedCoordsIndex != 0) {
                 while (contains == true) {
                     int bonusFieldX = (int) (Math.random() * x);
                     int bonusFieldY = (int) (Math.random() * y);
-                    Bonuses bonus = Bonuses.getRandomBonus();
                     List<Integer> coordsToCheck = new ArrayList<>();
                     coordsToCheck.add(bonusFieldX);
                     coordsToCheck.add(bonusFieldY);
@@ -92,14 +88,14 @@ public class WorldMap {
                         contains = true;
                     } else {
                         contains = false;
-                        fields[bonusFieldX][bonusFieldY] = new BonusField();
-                        List<Integer> coordsList = new ArrayList<Integer>();
+                        fields[bonusFieldX][bonusFieldY] = new BonusField(bonusFieldX, bonusFieldY);
+                        List<Integer> coordsList = new ArrayList<>();
                         coordsList.add(bonusFieldX);
                         coordsList.add(bonusFieldY);
                         usedCoords.add(usedCoordsIndex, coordsList);
                         usedCoordsIndex += 1;
-                        bonusFieldCoords.add(bonusFieldX);
-                        bonusFieldCoords.add(bonusFieldY);
+                        FoodField.getFoodFieldCoords().add(bonusFieldX);
+                        FoodField.getFoodFieldCoords().add(bonusFieldY);
                         fieldsCoords.add(bonusFieldX);
                         fieldsCoords.add(bonusFieldY);
                     }
@@ -107,21 +103,21 @@ public class WorldMap {
             } else {
                 int bonusFieldX = (int) (Math.random() * x);
                 int bonusFieldY = (int) (Math.random() * y);
-                fields[bonusFieldX][bonusFieldY] = new BonusField();
-                List<Integer> coordsList = new ArrayList<Integer>();
+                fields[bonusFieldX][bonusFieldY] = new BonusField(bonusFieldX, bonusFieldY);
+                List<Integer> coordsList = new ArrayList<>();
                 coordsList.add(bonusFieldX);
                 coordsList.add(bonusFieldY);
                 usedCoords.add(0, coordsList);
                 usedCoordsIndex += 1;
-                bonusFieldCoords.add(bonusFieldX);
-                bonusFieldCoords.add(bonusFieldY);
+                FoodField.getFoodFieldCoords().add(bonusFieldX);
+                FoodField.getFoodFieldCoords().add(bonusFieldY);
                 fieldsCoords.add(bonusFieldX);
                 fieldsCoords.add(bonusFieldY);
             }
         }
     }
 
-    public static void generateTrapFields(int x, int y, int initialTrapsNumber) {
+    public void generateTrapFields(int x, int y, int initialTrapsNumber) {
         for (int i = 0; i < initialTrapsNumber; i++) {
             boolean contains = true;
             if (usedCoordsIndex != 0) {
@@ -135,14 +131,14 @@ public class WorldMap {
                         contains = true;
                     } else {
                         contains = false;
-                        fields[trapFieldX][trapFieldY] = new TrapField(false);
-                        List<Integer> coordsList = new ArrayList<Integer>();
+                        fields[trapFieldX][trapFieldY] = new TrapField(trapFieldX, trapFieldY, false);
+                        List<Integer> coordsList = new ArrayList<>();
                         coordsList.add(trapFieldX);
                         coordsList.add(trapFieldY);
                         usedCoords.add(usedCoordsIndex, coordsList);
                         usedCoordsIndex += 1;
-                        trapFieldCoords.add(trapFieldX);
-                        trapFieldCoords.add(trapFieldY);
+                        TrapField.getTrapFieldCoords().add(trapFieldX);
+                        TrapField.getTrapFieldCoords().add(trapFieldY);
                         fieldsCoords.add(trapFieldX);
                         fieldsCoords.add(trapFieldY);
                     }
@@ -150,22 +146,22 @@ public class WorldMap {
             } else {
                 int trapFieldX = (int) (Math.random() * x);
                 int trapFieldY = (int) (Math.random() * y);
-                fields[trapFieldX][trapFieldY] = new TrapField(false);
+                fields[trapFieldX][trapFieldY] = new TrapField(trapFieldX, trapFieldY, false);
                 fields[trapFieldX][trapFieldY].setFieldContent(FieldContent.TRAP);
-                List<Integer> coordsList = new ArrayList<Integer>();
+                List<Integer> coordsList = new ArrayList<>();
                 coordsList.add(trapFieldX);
                 coordsList.add(trapFieldY);
                 usedCoords.add(0, coordsList);
                 usedCoordsIndex += 1;
-                trapFieldCoords.add(trapFieldX);
-                trapFieldCoords.add(trapFieldY);
+                TrapField.getTrapFieldCoords().add(trapFieldX);
+                TrapField.getTrapFieldCoords().add(trapFieldY);
                 fieldsCoords.add(trapFieldX);
                 fieldsCoords.add(trapFieldY);
             }
         }
     }
 
-    public static void generateCharacters(int x, int y, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
+    public void generateCharacters(int x, int y, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
         for (int i = 0; i < initialAltruistsNumber; i++) {
             boolean findNewAltruistCoords = true;
             while (findNewAltruistCoords) {
@@ -181,7 +177,7 @@ public class WorldMap {
                 }
                 if (crowd != 2) {
                     findNewAltruistCoords = false;
-                    List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                    List<Integer> usedFieldCoords = new ArrayList<>();
                     usedFieldCoords.add(altruistPositionX);
                     usedFieldCoords.add(altruistPositionY);
                     crowdedFields.add(usedFieldCoords);
@@ -235,7 +231,7 @@ public class WorldMap {
                 }
                 if (crowd != 2) {
                     findNewKillerCoords = false;
-                    List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                    List<Integer> usedFieldCoords = new ArrayList<>();
                     usedFieldCoords.add(killerPositionX);
                     usedFieldCoords.add(killerPositionY);
                     crowdedFields.add(usedFieldCoords);
@@ -246,7 +242,7 @@ public class WorldMap {
         }
     }
 
-    public static void mapUpdate() {
+    public static void mapUpdate(int mapWidth, int mapLength) {
         for (var blob : objectsOnMap) {
             if (blob != null)
                 blob.setCoords(1000000000, 1000000000);
@@ -294,18 +290,18 @@ public class WorldMap {
                 int x = blob.getCoords("x");
                 int y = blob.getCoords("y");
                 AMapField field = null;
-                for (int i = 0; i < foodFieldCoords.size(); i += 2) {
-                    if (foodFieldCoords.get(i) == x && foodFieldCoords.get(i + 1) == y) {
+                for (int i = 0; i < FoodField.getFoodFieldCoords().size(); i += 2) {
+                    if (FoodField.getFoodFieldCoords().get(i) == x && FoodField.getFoodFieldCoords().get(i + 1) == y) {
                         field = fields[x][y];
                     }
                 }
-                for (int i = 0; i < bonusFieldCoords.size(); i += 2) {
-                    if (bonusFieldCoords.get(i) == x && bonusFieldCoords.get(i + 1) == y) {
+                for (int i = 0; i < FoodField.getFoodFieldCoords().size(); i += 2) {
+                    if (FoodField.getFoodFieldCoords().get(i) == x && FoodField.getFoodFieldCoords().get(i + 1) == y) {
                         field = fields[x][y];
                     }
                 }
-                for (int i = 0; i < trapFieldCoords.size(); i += 2) {
-                    if (trapFieldCoords.get(i) == x && trapFieldCoords.get(i + 1) == y) {
+                for (int i = 0; i < TrapField.getTrapFieldCoords().size(); i += 2) {
+                    if (TrapField.getTrapFieldCoords().get(i) == x && TrapField.getTrapFieldCoords().get(i + 1) == y) {
                         field = fields[x][y];
                     }
                 }
@@ -326,36 +322,31 @@ public class WorldMap {
         }
     }
 
+    public static void updateCoordsAfterBlobDeath(int index) {
+        if (objectsOnMap.get(index) != null) {
+            int x = objectsOnMap.get(index).getCoords("x");
+            int y = objectsOnMap.get(index).getCoords("y");
+            for (var coords : crowdedFields) {
+                if (coords != null && coords.get(0) != null && coords.get(1) != null) {
+                    if (coords.get(0) == x && coords.get(1) == y) {
+                        coords.set(0, null);
+                        coords.set(1, null);
+                    }
+                }
+            }
+        }
+    }
+
     public static List<Live> getObjectsOnMap() {
         return objectsOnMap;
-    }
-
-    public static List<Integer> getFoodFieldCoords() {
-        return foodFieldCoords;
-    }
-
-    public static List<Integer> getBonusFieldCoords() {
-        return bonusFieldCoords;
-    }
-
-    public static List<Integer> getTrapFieldCoords() {
-        return trapFieldCoords;
     }
 
     public static List<Integer> getFieldsCoords() {
         return fieldsCoords;
     }
 
-    public static List<List<Integer>> getUsedCoords() {
-        return usedCoords;
-    }
-
     public static List<List<Integer>> getCrowdedFields() {
         return crowdedFields;
-    }
-
-    public static AMapField[][] getFields() {
-        return fields;
     }
 
     public static void updateBlobsAmount(int newAmount) {

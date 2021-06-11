@@ -13,7 +13,7 @@ public abstract class ABlob implements Live {
     protected AMapField aMapField;
     private boolean alive = true;
     protected String characteristic;
-    public NeighbourType neighbourType;
+    private NeighbourType neighbourType;
 
     public ABlob(int x, int y, boolean alive, String characteristic, int index) {
         this.x = x;
@@ -50,20 +50,7 @@ public abstract class ABlob implements Live {
     public void die(List objectsOnMap) {
         objectsOnMap.set(index, null);
         WorldMap.updateBlobsAmount(1);
-        Live killedBlob = (Live) objectsOnMap.get(index);
-        List<List<Integer>> crowdedFields = WorldMap.getCrowdedFields();
-        if (killedBlob != null) {
-            int x = killedBlob.getCoords("x");
-            int y = killedBlob.getCoords("y");
-            for (var coords : crowdedFields) {
-                if (coords != null && coords.get(0) != null && coords.get(1) != null) {
-                    if (coords.get(0) == x && coords.get(1) == y) {
-                        coords.set(0, null);
-                        coords.set(1, null);
-                    }
-                }
-            }
-        }
+        WorldMap.updateCoordsAfterBlobDeath(index);
     }
 
     public void setNeighbourType(NeighbourType neighbourType) {

@@ -1,11 +1,13 @@
 package Classes.Map;
 
-import Interfaces.Live;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BonusField extends AMapField {
-    @Override
-    public void interactWithLive(Live live) {
+    private static List<Integer> bonusFieldCoords = new ArrayList<>();
 
+    public BonusField(int x, int y) {
+        super(x, y);
     }
 
     @Override
@@ -32,5 +34,19 @@ public class BonusField extends AMapField {
     @Override
     public void setFieldContent(FieldContent fieldContent) {
 
+    }
+
+    @Override
+    public int getX() {
+        return x;
+    }
+
+    @Override
+    public int getY() {
+        return y;
+    }
+
+    public static List<Integer> getBonusFieldCoords(){
+        return bonusFieldCoords;
     }
 }

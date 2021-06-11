@@ -25,6 +25,12 @@ public class Services {
         dayIteration();
     }
 
+    /**
+     * Dlaczego wszystkie metody są statyczne?
+     *
+     * main jest statyczny więc chcąc wywołać dayIteration, to dayIteration też musi być statyczna, to samo z getParameters.
+     */
+
     private static void getParameters() {
         Scanner initialParametersScanner = new Scanner(System.in);
         Scanner blobsProportionScanner = new Scanner(System.in);
@@ -39,37 +45,39 @@ public class Services {
         if (mapWidth * mapLength * 2 < initialBlobsNumber) {
             System.out.println("Blobki nie zmieszczą się na mapie. Spróbuj ponownie");
             getParameters();
+        } else {
+            System.out.println("Ilość pól z jedzeniem:");
+            initialFoodNumber = initialParametersScanner.nextInt();
+            if (mapWidth * mapLength * 0.9 < initialFoodNumber) {
+                System.out.println("Jedzenie nie zmieści się na mapie. Spróbuj ponownie.");
+                getParameters();
+            } else {
+                System.out.println("Czas trwania symulacji (dni):");
+                simulationLength = initialParametersScanner.nextInt();
+                System.out.println("Stosunek liczby agresorów do altruistów, np. 60/40:");
+                String blobsProportionRatio = blobsProportionScanner.nextLine();
+                String[] blobsProportion = blobsProportionRatio.split("/");
+                initialBonusesNumber = ((mapWidth * mapLength) - initialFoodNumber) / 2;
+                initialTrapsNumber = (mapWidth * mapLength) - initialFoodNumber - initialBonusesNumber;
+                initialKillersNumber = (initialBlobsNumber / 20) + 1;
+                initialAggressorsNumber = (initialBlobsNumber * Integer.parseInt(blobsProportion[0])) / (Integer.parseInt(blobsProportion[0]) + Integer.parseInt(blobsProportion[1]));
+                initialAltruistsNumber = initialBlobsNumber - initialKillersNumber - initialAggressorsNumber;
+            }
         }
-        System.out.println("Ilość pól z jedzeniem:");
-        initialFoodNumber = initialParametersScanner.nextInt();
-        if (mapWidth * mapLength * 0.9 < initialFoodNumber) {
-            System.out.println("Jedzenie nie zmieści się na mapie. Spróbuj ponownie.");
-            getParameters();
-        }
-        System.out.println("Czas trwania symulacji (dni):");
-        simulationLength = initialParametersScanner.nextInt();
-        System.out.println("Stosunek liczby agresorów do altruistów, np. 60/40:");
-        String blobsProportionRatio = blobsProportionScanner.nextLine();
-        String[] blobsProportion = blobsProportionRatio.split("/");
-        initialBonusesNumber = ((mapWidth * mapLength) - initialFoodNumber) / 2;
-        initialTrapsNumber = (mapWidth * mapLength) - initialFoodNumber - initialBonusesNumber;
-        initialKillersNumber = (initialBlobsNumber / 20) + 1;
-        initialAggressorsNumber = (initialBlobsNumber * Integer.parseInt(blobsProportion[0])) / (Integer.parseInt(blobsProportion[0]) + Integer.parseInt(blobsProportion[1]));
-        initialAltruistsNumber = initialBlobsNumber - initialKillersNumber - initialAggressorsNumber;
     }
 
     public static void dayIteration() throws IOException {
         for (int i = 1; i <= simulationLength; i++) {
-            System.out.println("Day " + i);
-            System.out.println(currentBlobsNumber);
-            WorldMap.mapUpdate();
+            System.out.println("Dzień " + i + ", Liczba blobków, które przeżyły:");
+            WorldMap.mapUpdate(mapWidth,mapLength);
             currentBlobsNumber -= WorldMap.getDiedBlobs();
             if (currentBlobsNumber <= 0) {
                 System.out.println("Niestety wszystkie blobki umarły");
                 currentBlobsNumber = 0;
             }
+            System.out.println(currentBlobsNumber);
             FileWriter csvWriter = new FileWriter("population.csv", true);
-            csvWriter.write("Day " + i + " " + currentBlobsNumber + "\n");
+            csvWriter.write("Dzień " + i + " " + currentBlobsNumber + "\n");
             csvWriter.flush();
             csvWriter.close();
         }

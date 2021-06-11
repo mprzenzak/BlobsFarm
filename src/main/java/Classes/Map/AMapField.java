@@ -1,14 +1,13 @@
 package Classes.Map;
 
-import Interfaces.Live;
-
 public abstract class AMapField {
-    public int x;
-    public int y;
+    protected int x;
+    protected int y;
 
-    private FieldContent fieldContent;
-
-    abstract void interactWithLive(Live live);
+    public AMapField(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public abstract void markTrapAsUsed();
 
@@ -19,4 +18,8 @@ public abstract class AMapField {
     public abstract double sendFood(double amount);
 
     public abstract void setFieldContent(FieldContent fieldContent);
+
+    public abstract int getX();
+
+    public abstract int getY();
 }
