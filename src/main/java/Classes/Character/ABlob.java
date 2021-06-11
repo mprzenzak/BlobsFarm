@@ -1,6 +1,5 @@
 package Classes.Character;
 
-import Classes.Map.AMapField;
 import Classes.Map.WorldMap;
 import Interfaces.Live;
 
@@ -10,7 +9,6 @@ public abstract class ABlob implements Live {
     protected int x;
     protected int y;
     protected int index;
-    protected AMapField aMapField;
     private boolean alive = true;
     protected String characteristic;
     private NeighbourType neighbourType;
