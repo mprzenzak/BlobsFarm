@@ -4,8 +4,17 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BonusField extends AMapField {
+    /**
+     * List of coords of all bonus fields.
+     */
     private static List<Integer> bonusFieldCoords = new ArrayList<>();
 
+    /**
+     * Constructor method. Creates object of class <code>BonusField</code>.
+     *
+     * @param x first coordinate of blob positioned on map
+     * @param y second coordinate of blob positioned on map
+     */
     public BonusField(int x, int y) {
         super(x, y);
     }
@@ -46,7 +55,12 @@ public class BonusField extends AMapField {
         return y;
     }
 
-    public static List<Integer> getBonusFieldCoords(){
+    /**
+     * Returns list bonusFieldCoords with coordinates of all trap fields.
+     *
+     * @return list bonusFieldCoords with coordinates of all trap fields.
+     */
+    public static List<Integer> getBonusFieldCoords() {
         return bonusFieldCoords;
     }
 }

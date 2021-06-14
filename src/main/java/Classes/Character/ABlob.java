@@ -5,19 +5,46 @@ import Interfaces.Live;
 
 import java.util.List;
 
+/**
+ * ABlob is an abstract class to represent a model od blob.
+ *
+ * @author Mikołaj Przenzak 259066@student.pwr.edu.pl
+ */
+
 public abstract class ABlob implements Live {
+    /**
+     * First coordinate of blob positioned on map.
+     */
     protected int x;
+    /**
+     * Second coordinate of blob positioned on map.
+     */
     protected int y;
+    /**
+     * Index of blob in the <code>objectsOnMap</code> list which is list of all living characters.
+     */
     protected int index;
+    /**
+     * Boolean to check if blob is alive.
+     */
     private boolean alive = true;
-    protected String characteristic;
+    /**
+     * Enum that specifies what kind of blob is on the same field simultaneously.
+     */
     private NeighbourType neighbourType;
 
-    public ABlob(int x, int y, boolean alive, String characteristic, int index) {
+    /**
+     * Constructor class.
+     *
+     * @param x     is first coordinate of blob positioned on map
+     * @param y     is second coordinate of blob positioned on map
+     * @param alive defines that newly created blob lives
+     * @param index defines the position inside the <code>objectsOnMap</code> list
+     */
+    public ABlob(int x, int y, boolean alive, int index) {
         this.x = x;
         this.y = y;
         this.alive = alive;
-        this.characteristic = characteristic;
         this.index = index;
     }
 
@@ -41,7 +68,7 @@ public abstract class ABlob implements Live {
     }
 
     @Override
-    public void die(List objectsOnMap,WorldMap map) {
+    public void die(List objectsOnMap, WorldMap map) {
         objectsOnMap.set(index, null);
         map.updateBlobsAmount(1);
         map.updateCoordsAfterBlobDeath(index);
