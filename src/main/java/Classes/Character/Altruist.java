@@ -9,12 +9,39 @@ import Interfaces.Live;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class Altruist. Represents one of characters. Altruist which meet another altruist on the same field on map,
+ * shares food and get 1 piece. If altruist meets ab aggressor, it grabs 0.5 piece of food.
+ *
+ * @author Mikołaj Przenzak 259066@student.pwr.edu.pl
+ */
+
 public class Altruist extends ABlob {
-    private static final ArrayList<Integer> AltruistIndcies = new ArrayList<>();
+    /**
+     * Stores indices of altruists in <code>objectsOnMap</code> list.
+     */
+    private static final ArrayList<Integer> AltruistIndices = new ArrayList<>();
+    /**
+     * Stores the amount of food that blob has. If it is equal 2, blob can reproduce, if falls below 1, blob dies.
+     */
     private static double foodAvailable = 0;
+    /**
+     * Defines if blob lives.
+     */
     private boolean alive;
+    /**
+     * Defines if blob can be killed.
+     */
     private boolean immortal;
 
+    /**
+     * Constructor method. Creates blob of class <code>Altruist</code>.
+     *
+     * @param x     is first coordinate of blob positioned on map
+     * @param y     is second coordinate of blob positioned on map
+     * @param alive defines that newly created blob lives
+     * @param index defines the position inside the <code>objectsOnMap</code> list
+     */
     public Altruist(int x, int y, boolean alive, int index) {
         super(x, y, alive, index);
         this.alive = true;
@@ -54,7 +81,7 @@ public class Altruist extends ABlob {
                     usedFieldCoords.add(altruistPositionY);
                     crowdedFields.add(usedFieldCoords);
                     int index = objectsOnMap.size();
-                    ArrayList altruistIndicies = Altruist.getAltruistIndicies();
+                    ArrayList altruistIndicies = Altruist.getAltruistIndices();
                     objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, index));
                     altruistIndicies.add(index);
                 }
@@ -112,8 +139,13 @@ public class Altruist extends ABlob {
         }
     }
 
-    public static ArrayList<Integer> getAltruistIndicies() {
-        return AltruistIndcies;
+    /**
+     * Returns list of indices of altruists contained in <code>objectsOnMap</code> list.
+     *
+     * @return list of indices <code>objectsOnMap</code>
+     */
+    public static ArrayList<Integer> getAltruistIndices() {
+        return AltruistIndices;
     }
 
     @Override

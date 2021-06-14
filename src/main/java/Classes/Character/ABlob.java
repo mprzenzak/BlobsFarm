@@ -28,9 +28,19 @@ public abstract class ABlob implements Live {
      * Boolean to check if blob is alive.
      */
     private boolean alive = true;
-
+    /**
+     * Enum that specifies what kind of blob is on the same field simultaneously.
+     */
     private NeighbourType neighbourType;
 
+    /**
+     * Constructor class.
+     *
+     * @param x     is first coordinate of blob positioned on map
+     * @param y     is second coordinate of blob positioned on map
+     * @param alive defines that newly created blob lives
+     * @param index defines the position inside the <code>objectsOnMap</code> list
+     */
     public ABlob(int x, int y, boolean alive, int index) {
         this.x = x;
         this.y = y;
@@ -58,7 +68,7 @@ public abstract class ABlob implements Live {
     }
 
     @Override
-    public void die(List objectsOnMap,WorldMap map) {
+    public void die(List objectsOnMap, WorldMap map) {
         objectsOnMap.set(index, null);
         map.updateBlobsAmount(1);
         map.updateCoordsAfterBlobDeath(index);

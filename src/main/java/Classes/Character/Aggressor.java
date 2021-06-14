@@ -6,12 +6,39 @@ import Interfaces.Live;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class Aggressor. Represents one of characters. Aggressor which meet another aggressor on the same field on map,
+ * fights and get 0 food because it is wasted. If aggressor meets an altruist, it grabs 1.5 piece of food.
+ *
+ * @author Mikołaj Przenzak 259066@student.pwr.edu.pl
+ */
+
 public class Aggressor extends ABlob {
-    private static final ArrayList<Integer> AggressorIndcies = new ArrayList<>();
+    /**
+     * Stores indices of aggressors in <code>objectsOnMap</code> list.
+     */
+    private static final ArrayList<Integer> AggressorIndices = new ArrayList<>();
+    /**
+     * Stores the amount of food that blob has. If it is equal 2, blob can reproduce, if falls below 1, blob dies.
+     */
     private static double foodAvailable = 0;
+    /**
+     * Defines if blob lives.
+     */
     private boolean alive;
+    /**
+     * Defines if blob can be killed.
+     */
     private boolean immortal;
 
+    /**
+     * Constructor method. Creates blob of class <code>Aggressor</code>.
+     *
+     * @param x     is first coordinate of blob positioned on map
+     * @param y     is second coordinate of blob positioned on map
+     * @param alive defines that newly created blob lives
+     * @param index defines the position inside the <code>objectsOnMap</code> list
+     */
     public Aggressor(int x, int y, boolean alive, int index) {
         super(x, y, alive, index);
         this.alive = true;
@@ -51,7 +78,7 @@ public class Aggressor extends ABlob {
                     usedFieldCoords.add(aggressorsPositionY);
                     crowdedFields.add(usedFieldCoords);
                     int index = objectsOnMap.size();
-                    ArrayList aggressorIndicies = Aggressor.getAggressorIndicies();
+                    ArrayList aggressorIndicies = Aggressor.getAggressorIndices();
                     objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, index));
                     aggressorIndicies.add(index);
                 }
@@ -109,8 +136,13 @@ public class Aggressor extends ABlob {
         }
     }
 
-    public static ArrayList<Integer> getAggressorIndicies() {
-        return AggressorIndcies;
+    /**
+     * Returns list of indices of aggressors contained in <code>objectsOnMap</code> list.
+     *
+     * @return list of indices <code>AggressorIndices</code>
+     */
+    public static ArrayList<Integer> getAggressorIndices() {
+        return AggressorIndices;
     }
 
     @Override

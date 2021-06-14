@@ -9,17 +9,65 @@ import Interfaces.Live;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class WorldMap. Generates map of simulation. Blobs can stand on fields on map.
+ * Generates any type of field and blob at the beginning of the simulation.
+ * In every iteration it refreshes map and finds new coords for blobs.
+ *
+ * @author Mikołaj Przenzak 259066@student.pwr.edu.pl
+ */
+
 public class WorldMap {
+    /**
+     * Two dimensional array of fields. It's size depends on parameters given by user.
+     */
     public AMapField[][] fields;
+    /**
+     * List of all blobs in simulation.
+     */
     public List<Live> objectsOnMap = new ArrayList<>();
+    /**
+     * Size of map horizontally given by user as a parameter.
+     */
     private int mapWidth;
+    /**
+     * Size of map vertically given by user as a parameter.
+     */
     private int mapLength;
+    /**
+     * Coordinates of fields stored as Integers to iterate through fields and check if blob stand on the field.
+     */
     private List<Integer> fieldsCoords = new ArrayList<>();
+    /**
+     * Coordinates of fields stored as lists of Integers to check if coords are used by any other field
+     * and to decide if field can be located here.
+     */
     private List<List<Integer>> usedCoords;
+    /**
+     * Number of blobs on each field. Used to decide if blob can stand on the specified field or if there is no free space.
+     */
     private List<List<Integer>> crowdedFields = new ArrayList<>();
+    /**
+     * An index of <code>usedCoords</code> list used to get the value from specified index.
+     */
     private int usedCoordsIndex = 0;
+    /**
+     * Number of blobs which died in the iteration. Used to count the number of alive blobs.
+     */
     private int blobsWhoDiedToday;
 
+    /**
+     * Constructor method. Creates map.
+     *
+     * @param mapWidth                is the horizontal size of map
+     * @param mapLength               is the vertical size of map
+     * @param initialFoodNumber       number of food fields to be generated
+     * @param initialBonusesNumber    number of bonus fields to be generated
+     * @param initialTrapsNumber      number of trap fields to be generated
+     * @param initialAltruistsNumber  number of altruists to be generated
+     * @param initialAggressorsNumber number of aggressors to be generated
+     * @param initialKillersNumber    number of killers to be generated
+     */
     public WorldMap(int mapWidth, int mapLength, int initialFoodNumber, int initialBonusesNumber, int initialTrapsNumber, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
         this.mapWidth = mapWidth;
         this.mapLength = mapLength;
@@ -31,6 +79,13 @@ public class WorldMap {
         generateCharacters(mapWidth, mapLength, initialAltruistsNumber, initialAggressorsNumber, initialKillersNumber);
     }
 
+    /**
+     * Generates a number of food fields given as a parameter.
+     *
+     * @param amount number of food fields to be generated
+     * @param x      is the horizontal size of map
+     * @param y      is the vertical size of map
+     */
     public void generateFoodFields(int amount, int x, int y) {
         for (int i = 0; i < amount; i++) {
             boolean contains = true;
@@ -46,7 +101,7 @@ public class WorldMap {
                     } else {
                         contains = false;
                         fields[foodFieldX][foodFieldY] = new FoodField(foodFieldX, foodFieldY, 2);
-                        List<Integer> coordsList = new ArrayList<Integer>();
+                        List<Integer> coordsList = new ArrayList<>();
                         coordsList.add(foodFieldX);
                         coordsList.add(foodFieldY);
                         usedCoords.add(usedCoordsIndex, coordsList);
@@ -74,6 +129,13 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Generates a number of bonus fields given as a parameter.
+     *
+     * @param x                    is the horizontal size of map
+     * @param y                    is the vertical size of map
+     * @param initialBonusesNumber number of bonus fields to be generated
+     */
     public void generateBonusFields(int x, int y, int initialBonusesNumber) {
         for (int i = 0; i < initialBonusesNumber; i++) {
             boolean contains = true;
@@ -117,6 +179,13 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Generates a number of trap fields given as a parameter.
+     *
+     * @param x                  is the horizontal size of map
+     * @param y                  is the vertical size of map
+     * @param initialTrapsNumber number of trap fields to be generated
+     */
     public void generateTrapFields(int x, int y, int initialTrapsNumber) {
         for (int i = 0; i < initialTrapsNumber; i++) {
             boolean contains = true;
@@ -161,6 +230,15 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Generates a number of blobs of each type specified as a parameter.
+     *
+     * @param x                       is the horizontal size of map
+     * @param y                       is the vertical size of map
+     * @param initialAltruistsNumber  is the number of altruists to be generated
+     * @param initialAggressorsNumber is the number of aggressors to be generated
+     * @param initialKillersNumber    is the number of killers to be generated
+     */
     public void generateCharacters(int x, int y, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
         for (int i = 0; i < initialAltruistsNumber; i++) {
             boolean findNewAltruistCoords = true;
@@ -182,7 +260,7 @@ public class WorldMap {
                     usedFieldCoords.add(altruistPositionY);
                     crowdedFields.add(usedFieldCoords);
                     int index = objectsOnMap.size();
-                    ArrayList altruistIndicies = Altruist.getAltruistIndicies();
+                    ArrayList altruistIndicies = Altruist.getAltruistIndices();
                     objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, index));
                     altruistIndicies.add(index);
                 }
@@ -209,7 +287,7 @@ public class WorldMap {
                     usedFieldCoords.add(aggressorsPositionY);
                     crowdedFields.add(usedFieldCoords);
                     int index = objectsOnMap.size();
-                    ArrayList aggressorIndicies = Aggressor.getAggressorIndicies();
+                    ArrayList aggressorIndicies = Aggressor.getAggressorIndices();
                     objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, index));
                     aggressorIndicies.add(index);
                 }
@@ -242,6 +320,13 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Refreshes positions of blobs in every iteration.
+     *
+     * @param mapWidth  is the horizontal size of map
+     * @param mapLength is the vertical size of map
+     * @param map       is an object of <code>WorldMap</code> class
+     */
     public void mapUpdate(int mapWidth, int mapLength, WorldMap map) {
         for (var blob : objectsOnMap) {
             if (blob != null)
@@ -322,6 +407,11 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Finds the coords where died blob was located and replaces it with null to free it up.
+     *
+     * @param index index of blob which died
+     */
     public void updateCoordsAfterBlobDeath(int index) {
         if (objectsOnMap.get(index) != null) {
             int x = objectsOnMap.get(index).getCoords("x");
@@ -337,18 +427,38 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Returns list od all blobs on map.
+     *
+     * @return list od all blobs on map
+     */
     public List<Live> getObjectsOnMap() {
         return objectsOnMap;
     }
 
+    /**
+     * Returns coordinates of all fields on map.
+     *
+     * @return coordinates of all fields on map
+     */
     public List<Integer> getFieldsCoords() {
         return fieldsCoords;
     }
 
+    /**
+     * Returns list of numbers of blobs on all fields.
+     *
+     * @return list of numbers of blobs on all fields
+     */
     public List<List<Integer>> getCrowdedFields() {
         return crowdedFields;
     }
 
+    /**
+     * Updates amount of alive blobs based on how many of them died and resets the value in every iteration.
+     *
+     * @param newAmount 0 or 1, 0 if number of died blobs should be reset, 1 if another blob died
+     */
     public void updateBlobsAmount(int newAmount) {
         if (newAmount == 0) {
             blobsWhoDiedToday = 0;
@@ -357,6 +467,11 @@ public class WorldMap {
         }
     }
 
+    /**
+     * Returns number of blobs which died during the iteration.
+     *
+     * @return number of blobs which died during the iteration.
+     */
     public int getDiedBlobs() {
         return blobsWhoDiedToday;
     }
