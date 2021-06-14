@@ -295,8 +295,8 @@ public class WorldMap {
                         field = fields[x][y];
                     }
                 }
-                for (int i = 0; i < FoodField.getFoodFieldCoords().size(); i += 2) {
-                    if (FoodField.getFoodFieldCoords().get(i) == x && FoodField.getFoodFieldCoords().get(i + 1) == y) {
+                for (int i = 0; i < BonusField.getBonusFieldCoords().size(); i += 2) {
+                    if (BonusField.getBonusFieldCoords().get(i) == x && BonusField.getBonusFieldCoords().get(i + 1) == y) {
                         field = fields[x][y];
                     }
                 }
