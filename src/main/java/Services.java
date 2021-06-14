@@ -19,19 +19,14 @@ public class Services {
 
     public static void main(String[] args) throws IOException {
         System.out.println("Witaj w symulacji agentowej przedstawiającej kolonię blobków \nPodaj parametry wejściowe.\nPamiętaj, że na każdym polu mapy mogą stać maksymalnie dwa blobki oraz, że liczba pól \nz jedzeniem nie może przekraczać 90% pól. Uwzględnij to podczas podawania parametrów");
-        getParameters();
+        Services services = new Services();
+        services.getParameters();
         WorldMap map = new WorldMap(mapWidth, mapLength, initialFoodNumber, initialBonusesNumber, initialTrapsNumber, initialAltruistsNumber, initialAggressorsNumber, initialKillersNumber);
         currentBlobsNumber = initialBlobsNumber;
-        dayIteration();
+        services.dayIteration(map);
     }
 
-    /**
-     * Dlaczego wszystkie metody są statyczne?
-     *
-     * main jest statyczny więc chcąc wywołać dayIteration, to dayIteration też musi być statyczna, to samo z getParameters.
-     */
-
-    private static void getParameters() {
+    private void getParameters() {
         Scanner initialParametersScanner = new Scanner(System.in);
         Scanner blobsProportionScanner = new Scanner(System.in);
         Scanner mapDimensionsScanner = new Scanner(System.in);
@@ -66,11 +61,11 @@ public class Services {
         }
     }
 
-    public static void dayIteration() throws IOException {
+    public void dayIteration(WorldMap map) throws IOException {
         for (int i = 1; i <= simulationLength; i++) {
             System.out.println("Dzień " + i + ", Liczba blobków, które przeżyły:");
-            WorldMap.mapUpdate(mapWidth,mapLength);
-            currentBlobsNumber -= WorldMap.getDiedBlobs();
+            map.mapUpdate(mapWidth, mapLength, map);
+            currentBlobsNumber -= map.getDiedBlobs();
             if (currentBlobsNumber <= 0) {
                 System.out.println("Niestety wszystkie blobki umarły");
                 currentBlobsNumber = 0;

@@ -10,15 +10,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class WorldMap {
-    public static AMapField[][] fields;
-    public static List<Live> objectsOnMap = new ArrayList<>();
+    public AMapField[][] fields;
+    public List<Live> objectsOnMap = new ArrayList<>();
     private int mapWidth;
     private int mapLength;
-    private static List<Integer> fieldsCoords = new ArrayList<>();
-    private static List<List<Integer>> usedCoords;
-    private static List<List<Integer>> crowdedFields = new ArrayList<>();
+    private List<Integer> fieldsCoords = new ArrayList<>();
+    private List<List<Integer>> usedCoords;
+    private List<List<Integer>> crowdedFields = new ArrayList<>();
     private int usedCoordsIndex = 0;
-    private static int blobsWhoDiedToday;
+    private int blobsWhoDiedToday;
 
     public WorldMap(int mapWidth, int mapLength, int initialFoodNumber, int initialBonusesNumber, int initialTrapsNumber, int initialAltruistsNumber, int initialAggressorsNumber, int initialKillersNumber) {
         this.mapWidth = mapWidth;
@@ -242,7 +242,7 @@ public class WorldMap {
         }
     }
 
-    public static void mapUpdate(int mapWidth, int mapLength) {
+    public void mapUpdate(int mapWidth, int mapLength, WorldMap map) {
         for (var blob : objectsOnMap) {
             if (blob != null)
                 blob.setCoords(1000000000, 1000000000);
@@ -305,7 +305,7 @@ public class WorldMap {
                         field = fields[x][y];
                     }
                 }
-                blob.interactWithAMapField(field, mapWidth, mapLength);
+                blob.interactWithAMapField(field, mapWidth, mapLength, this);
             }
         }
         for (var blob : objectsOnMap) {
@@ -314,15 +314,15 @@ public class WorldMap {
                 int y = blob.getCoords("y");
                 for (var neighbourBlob : objectsOnMap) {
                     if (neighbourBlob != null && neighbourBlob.getCoords("x") == x && neighbourBlob.getCoords("y") == y && blob.getNeighbourType() == NeighbourType.NONE) {
-                        neighbourBlob.interactWithLive(blob);
-                        blob.interactWithLive(neighbourBlob);
+                        neighbourBlob.interactWithLive(blob, map);
+                        blob.interactWithLive(neighbourBlob, map);
                     }
                 }
             }
         }
     }
 
-    public static void updateCoordsAfterBlobDeath(int index) {
+    public void updateCoordsAfterBlobDeath(int index) {
         if (objectsOnMap.get(index) != null) {
             int x = objectsOnMap.get(index).getCoords("x");
             int y = objectsOnMap.get(index).getCoords("y");
@@ -337,19 +337,19 @@ public class WorldMap {
         }
     }
 
-    public static List<Live> getObjectsOnMap() {
+    public List<Live> getObjectsOnMap() {
         return objectsOnMap;
     }
 
-    public static List<Integer> getFieldsCoords() {
+    public List<Integer> getFieldsCoords() {
         return fieldsCoords;
     }
 
-    public static List<List<Integer>> getCrowdedFields() {
+    public List<List<Integer>> getCrowdedFields() {
         return crowdedFields;
     }
 
-    public static void updateBlobsAmount(int newAmount) {
+    public void updateBlobsAmount(int newAmount) {
         if (newAmount == 0) {
             blobsWhoDiedToday = 0;
         } else {
@@ -357,7 +357,7 @@ public class WorldMap {
         }
     }
 
-    public static int getDiedBlobs() {
+    public int getDiedBlobs() {
         return blobsWhoDiedToday;
     }
 }

@@ -12,25 +12,25 @@ public class Killer extends ABlob {
     }
 
     @Override
-    public void reproduce(int mapWidth, int mapLength) {
+    public void reproduce(int mapWidth, int mapLength, WorldMap map) {
 
     }
 
     @Override
-    public void interactWithLive(Live live) {
+    public void interactWithLive(Live live, WorldMap map) {
         live.setNeighbourType(NeighbourType.KILLER);
-        List<Live> blobs = WorldMap.getObjectsOnMap();
+        List<Live> blobs = map.getObjectsOnMap();
         for (var blob : blobs) {
             if (blob != null && blob.getIndex() == this.index) {
                 if (!blob.isImmortal()) {
-                    blob.die(blobs);
+                    blob.die(blobs, map);
                 }
             }
         }
     }
 
     @Override
-    public void interactWithAMapField(AMapField field, int mapWidth, int mapLength) {
+    public void interactWithAMapField(AMapField field, int mapWidth, int mapLength, WorldMap map) {
 
     }
 

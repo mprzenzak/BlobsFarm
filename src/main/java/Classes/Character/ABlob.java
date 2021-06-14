@@ -41,10 +41,10 @@ public abstract class ABlob implements Live {
     }
 
     @Override
-    public void die(List objectsOnMap) {
+    public void die(List objectsOnMap,WorldMap map) {
         objectsOnMap.set(index, null);
-        WorldMap.updateBlobsAmount(1);
-        WorldMap.updateCoordsAfterBlobDeath(index);
+        map.updateBlobsAmount(1);
+        map.updateCoordsAfterBlobDeath(index);
     }
 
     @Override

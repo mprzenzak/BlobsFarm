@@ -47,7 +47,7 @@ public class FoodField extends AMapField {
         return y;
     }
 
-    public static List<Integer> getFoodFieldCoords(){
+    public static List<Integer> getFoodFieldCoords() {
         return foodFieldCoords;
     }
 }

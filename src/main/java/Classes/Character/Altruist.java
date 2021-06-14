@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Altruist extends ABlob {
-    public static final ArrayList<Integer> AltruistIndcies = new ArrayList<>();
+    private static final ArrayList<Integer> AltruistIndcies = new ArrayList<>();
     private static double foodAvailable = 0;
     private boolean alive;
     private boolean immortal;
@@ -21,9 +21,9 @@ public class Altruist extends ABlob {
     }
 
     @Override
-    public void reproduce(int mapWidth, int mapLength) {
-        List<Live> objectsOnMap = WorldMap.getObjectsOnMap();
-        List<List<Integer>> crowdedFields = WorldMap.getCrowdedFields();
+    public void reproduce(int mapWidth, int mapLength, WorldMap map) {
+        List<Live> objectsOnMap = map.getObjectsOnMap();
+        List<List<Integer>> crowdedFields = map.getCrowdedFields();
         int aliveBlob = 0;
         for (var blob : objectsOnMap) {
             if (blob != null)
@@ -63,12 +63,12 @@ public class Altruist extends ABlob {
     }
 
     @Override
-    public void interactWithLive(Live live) {
+    public void interactWithLive(Live live, WorldMap map) {
         live.setNeighbourType(NeighbourType.ALTRUIST);
     }
 
     @Override
-    public void interactWithAMapField(AMapField field, int mapWidth, int mapLength) {
+    public void interactWithAMapField(AMapField field, int mapWidth, int mapLength, WorldMap map) {
         List<Integer> foodFieldCoords = FoodField.getFoodFieldCoords();
         for (int i = 0; i < FoodField.getFoodFieldCoords().size() - 3; i += 2) {
             if (this.getNeighbourType() != null && field != null && field.getX() == foodFieldCoords.get(i) && field.getY() == foodFieldCoords.get(i + 1)) {
@@ -82,7 +82,7 @@ public class Altruist extends ABlob {
                 }
             }
         }
-        List<Integer> fieldsCoords = WorldMap.getFieldsCoords();
+        List<Integer> fieldsCoords = map.getFieldsCoords();
         for (int i = 0; i < fieldsCoords.size(); i += 2) {
             if (field != null && field.getX() == fieldsCoords.get(i) && field.getY() == fieldsCoords.get(i + 1)) {
                 FieldContent fieldContent = field.sendFieldContent();
@@ -92,20 +92,21 @@ public class Altruist extends ABlob {
                             foodAvailable += 1;
                         case GIVE10CHILDREN:
                             for (int j = 0; j < 10; j++) {
-                                reproduce(mapWidth, mapLength);
+                                reproduce(mapWidth, mapLength, map);
                             }
                         case MAKE_IMMORTAL:
                             immortal = true;
                         case TRAP:
-                            if (field.checkIfTrapUsed()==false) {
-                                die(WorldMap.getObjectsOnMap());
+                            if (field.checkIfTrapUsed() == false) {
+                                die(map.getObjectsOnMap(), map);
                                 field.markTrapAsUsed();
-                            } }
+                            }
+                    }
                 }
             }
         }
-       if (foodAvailable == 2) {
-            reproduce(mapWidth, mapLength);
+        if (foodAvailable == 2) {
+            reproduce(mapWidth, mapLength, map);
         } else if (foodAvailable < 1) {
             alive = false;
         }
