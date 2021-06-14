@@ -9,7 +9,6 @@ import java.util.List;
 public class Aggressor extends ABlob {
     private static final ArrayList<Integer> AggressorIndcies = new ArrayList<>();
     private static double foodAvailable = 0;
-    private static Bonuses bonus = null;
     private boolean alive;
     private boolean immortal;
 

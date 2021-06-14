@@ -45,4 +45,8 @@ public class BonusField extends AMapField {
     public int getY() {
         return y;
     }
+
+    public static List<Integer> getBonusFieldCoords(){
+        return bonusFieldCoords;
+    }
 }
