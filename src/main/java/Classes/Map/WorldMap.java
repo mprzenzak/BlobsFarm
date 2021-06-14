@@ -183,7 +183,7 @@ public class WorldMap {
                     crowdedFields.add(usedFieldCoords);
                     int index = objectsOnMap.size();
                     ArrayList altruistIndicies = Altruist.getAltruistIndicies();
-                    objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, "Altruist", index));
+                    objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, index));
                     altruistIndicies.add(index);
                 }
             }
@@ -204,13 +204,13 @@ public class WorldMap {
                 }
                 if (crowd != 2) {
                     findNewAggressorCoords = false;
-                    List<Integer> usedFieldCoords = new ArrayList<Integer>();
+                    List<Integer> usedFieldCoords = new ArrayList<>();
                     usedFieldCoords.add(aggressorsPositionX);
                     usedFieldCoords.add(aggressorsPositionY);
                     crowdedFields.add(usedFieldCoords);
                     int index = objectsOnMap.size();
                     ArrayList aggressorIndicies = Aggressor.getAggressorIndicies();
-                    objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, "Aggressor", index));
+                    objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, index));
                     aggressorIndicies.add(index);
                 }
             }
@@ -236,7 +236,7 @@ public class WorldMap {
                     usedFieldCoords.add(killerPositionY);
                     crowdedFields.add(usedFieldCoords);
                     int index = objectsOnMap.size();
-                    objectsOnMap.add(new Killer(killerPositionX, killerPositionY, true, "Killer", index));
+                    objectsOnMap.add(new Killer(killerPositionX, killerPositionY, true, index));
                 }
             }
         }

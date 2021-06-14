@@ -12,8 +12,8 @@ public class Aggressor extends ABlob {
     private boolean alive;
     private boolean immortal;
 
-    public Aggressor(int x, int y, boolean alive, String characteristic, int index) {
-        super(x, y, alive, characteristic, index);
+    public Aggressor(int x, int y, boolean alive, int index) {
+        super(x, y, alive, index);
         this.alive = true;
     }
 
@@ -52,7 +52,7 @@ public class Aggressor extends ABlob {
                     crowdedFields.add(usedFieldCoords);
                     int index = objectsOnMap.size();
                     ArrayList aggressorIndicies = Aggressor.getAggressorIndicies();
-                    objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, "Aggressor", index));
+                    objectsOnMap.add(new Aggressor(aggressorsPositionX, aggressorsPositionY, true, index));
                     aggressorIndicies.add(index);
                 }
             }

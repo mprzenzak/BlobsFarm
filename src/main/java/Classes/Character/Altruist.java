@@ -15,8 +15,8 @@ public class Altruist extends ABlob {
     private boolean alive;
     private boolean immortal;
 
-    public Altruist(int x, int y, boolean alive, String characteristic, int index) {
-        super(x, y, alive, characteristic, index);
+    public Altruist(int x, int y, boolean alive, int index) {
+        super(x, y, alive, index);
         this.alive = true;
     }
 
@@ -55,7 +55,7 @@ public class Altruist extends ABlob {
                     crowdedFields.add(usedFieldCoords);
                     int index = objectsOnMap.size();
                     ArrayList altruistIndicies = Altruist.getAltruistIndicies();
-                    objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, "Altruist", index));
+                    objectsOnMap.add(new Altruist(altruistPositionX, altruistPositionY, true, index));
                     altruistIndicies.add(index);
                 }
             }

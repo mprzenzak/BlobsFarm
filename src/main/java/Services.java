@@ -4,19 +4,64 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Scanner;
 
+/**
+ * Services is main class that will be used to get parameters from the user and to refresh map.
+ *
+ * @author Mikołaj Przenzak 259066@student.pwr.edu.pl
+ */
+
 public class Services {
+    /**
+     * The number of iterations of simulation
+     */
     private static int simulationLength;
+    /**
+     * Number of blobs which are spawned on map
+     */
     private static int initialBlobsNumber;
+    /**
+     * Number of food fields which are generated on map
+     */
     private static int initialFoodNumber;
+    /**
+     * Number of bonus fields which are generated on map
+     */
     private static int initialBonusesNumber;
+    /**
+     * Number of trap fields which are generated on map
+     */
     private static int initialTrapsNumber;
+    /**
+     * Number of killers that are spawned on map. Is equal to 5% of all blobs rounded to int plus one.
+     */
     private static int initialKillersNumber;
+    /**
+     * Number of altruists that are spawned on map. Counted on the basis of the altruists to aggressors number ratio.
+     */
     private static int initialAltruistsNumber;
+    /**
+     * Number of aggressors that are spawned on map. Counted on the basis of the altruists to aggressors number ratio.
+     */
     private static int initialAggressorsNumber;
+    /**
+     * Number of blobs that is updated and displayed in every day iteration and saved to statistics (csv)
+     */
     private static int currentBlobsNumber;
+    /**
+     * Number of fields horizontally
+     */
     private static int mapWidth;
+    /**
+     * Number of fields vertically
+     */
     private static int mapLength;
 
+    /**
+     * Main method called when simulation starts.
+     *
+     * @param args
+     * @throws IOException
+     */
     public static void main(String[] args) throws IOException {
         System.out.println("Witaj w symulacji agentowej przedstawiającej kolonię blobków \nPodaj parametry wejściowe.\nPamiętaj, że na każdym polu mapy mogą stać maksymalnie dwa blobki oraz, że liczba pól \nz jedzeniem nie może przekraczać 90% pól. Uwzględnij to podczas podawania parametrów");
         Services services = new Services();
@@ -26,6 +71,9 @@ public class Services {
         services.dayIteration(map);
     }
 
+    /**
+     * Gets initial parameters from the user.
+     */
     private void getParameters() {
         Scanner initialParametersScanner = new Scanner(System.in);
         Scanner blobsProportionScanner = new Scanner(System.in);
@@ -61,6 +109,12 @@ public class Services {
         }
     }
 
+    /**
+     * Refreshed map, displays current characters number and saves statistics to .csv file.
+     *
+     * @param map is <code>WorldMap</code> class object
+     * @throws IOException
+     */
     public void dayIteration(WorldMap map) throws IOException {
         for (int i = 1; i <= simulationLength; i++) {
             System.out.println("Dzień " + i + ", Liczba blobków, które przeżyły:");

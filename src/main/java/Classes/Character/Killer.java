@@ -7,8 +7,8 @@ import Interfaces.Live;
 import java.util.List;
 
 public class Killer extends ABlob {
-    public Killer(int x, int y, boolean alive, String characteristic, int index) {
-        super(x, y, alive, characteristic, index);
+    public Killer(int x, int y, boolean alive, int index) {
+        super(x, y, alive, index);
     }
 
     @Override
