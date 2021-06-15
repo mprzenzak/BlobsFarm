@@ -9,7 +9,22 @@ import java.util.Random;
  */
 
 public enum FieldContent {
-    EXTENDED_LIFE_LENGTH, GIVE10CHILDREN, MAKE_IMMORTAL, TRAP;
+    /**
+     * Lengthens live period by one day
+     */
+    EXTENDED_LIFE_LENGTH,
+    /**
+     * Creates 10 blobs with the same characteristics
+     */
+    GIVE10CHILDREN,
+    /**
+     * Makes the blob immortal
+     */
+    MAKE_IMMORTAL,
+    /**
+     * Kills the blob
+     */
+    TRAP;
 
     /**
      * Draws type of content.

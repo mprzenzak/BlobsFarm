@@ -3,6 +3,12 @@ package Classes.Map;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class BonusField represents fields which contain various bonuses.
+ *
+ * @author Mikołaj Przenzak 259066@student.pwr.edu.pl
+ */
+
 public class BonusField extends AMapField {
     /**
      * List of coords of all bonus fields.

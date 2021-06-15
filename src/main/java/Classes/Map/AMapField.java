@@ -16,6 +16,12 @@ public abstract class AMapField {
      */
     protected int y;
 
+    /**
+     * Constructor method.
+     *
+     * @param x first coordinate of blob positioned on map
+     * @param y second coordinate of blob positioned on map
+     */
     public AMapField(int x, int y) {
         this.x = x;
         this.y = y;

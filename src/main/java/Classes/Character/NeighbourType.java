@@ -7,5 +7,20 @@ package Classes.Character;
  * @author Mikołaj Przenzak 259066@student.pwr.edu.pl
  */
 public enum NeighbourType {
-    NONE, AGGRESSOR, ALTRUIST, KILLER
+    /**
+     * Only one blob stands on the field
+     */
+    NONE,
+    /**
+     * The field is shared with an aggressor
+     */
+    AGGRESSOR,
+    /**
+     * The field is shared with an altruist
+     */
+    ALTRUIST,
+    /**
+     * The field is shared with a killer
+     */
+    KILLER
 }

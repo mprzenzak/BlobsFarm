@@ -59,8 +59,8 @@ public class Services {
     /**
      * Main method called when simulation starts.
      *
-     * @param args
-     * @throws IOException
+     * @param args main method arguments
+     * @throws IOException exception that main method throws
      */
     public static void main(String[] args) throws IOException {
         System.out.println("Witaj w symulacji agentowej przedstawiającej kolonię blobków \nPodaj parametry wejściowe.\nPamiętaj, że na każdym polu mapy mogą stać maksymalnie dwa blobki oraz, że liczba pól \nz jedzeniem nie może przekraczać 90% pól. Uwzględnij to podczas podawania parametrów");
@@ -113,7 +113,7 @@ public class Services {
      * Refreshed map, displays current characters number and saves statistics to .csv file.
      *
      * @param map is <code>WorldMap</code> class object
-     * @throws IOException
+     * @throws IOException exception that main method throws
      */
     public void dayIteration(WorldMap map) throws IOException {
         for (int i = 1; i <= simulationLength; i++) {
