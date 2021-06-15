@@ -17,7 +17,7 @@ public class TrapField extends AMapField {
     /**
      * Boolean true if trap is used and can't be used again, false when it can be used.
      */
-    private static boolean isUsed;
+    private boolean isUsed;
 
     /**
      * Constructor method. Creates object of class <code>TrapField</code>.

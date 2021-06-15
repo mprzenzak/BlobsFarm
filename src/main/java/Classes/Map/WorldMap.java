@@ -21,11 +21,11 @@ public class WorldMap {
     /**
      * Two dimensional array of fields. It's size depends on parameters given by user.
      */
-    public AMapField[][] fields;
+    private AMapField[][] fields;
     /**
      * List of all blobs in simulation.
      */
-    public List<Live> objectsOnMap = new ArrayList<>();
+    private List<Live> objectsOnMap = new ArrayList<>();
     /**
      * Size of map horizontally given by user as a parameter.
      */
